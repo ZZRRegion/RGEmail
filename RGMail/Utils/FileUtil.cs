@@ -23,7 +23,8 @@ namespace RGMail
             {
                 if (reg.IsMatch(item))
                 {
-                    lst.Add(item);
+                    if(!lst.Contains(item))
+                        lst.Add(item);
                 }
             }
             return lst;

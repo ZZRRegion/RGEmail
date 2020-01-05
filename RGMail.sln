@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "说明", "说明", "{C56E3552-3052-4B92-92A6-297C0EB1E789}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
+		Warn.txt = Warn.txt
 	EndProjectSection
 EndProject
 Global

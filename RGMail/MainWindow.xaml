@@ -30,7 +30,7 @@
                     <TextBox Text="{Binding Password,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
                     <TextBlock Foreground="Green" Text="SMTP地址"/>
                     <TextBox Text="{Binding SMTPHost,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
-                    <TextBlock Foreground="Green" Text="发件人姓名"/>
+                    <TextBlock Foreground="Green" Text="发件人名称"/>
                     <TextBox Text="{Binding Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
             </GroupBox>
@@ -52,6 +52,7 @@
             <TextBlock FontSize="20" Foreground="Green" DockPanel.Dock="Top" Text="填写主题"/>
             <TextBox Text="{Binding Subject,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Top"/>
             <TextBlock FontSize="20" Foreground="Green" DockPanel.Dock="Top" Text="填写正文内容"/>
+            
             <TextBox Text="{Binding Body,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Top" ScrollViewer.VerticalScrollBarVisibility="Visible" TextWrapping="Wrap"/>
         </DockPanel>
     </Grid>

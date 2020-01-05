@@ -73,6 +73,7 @@
     <Compile Include="Utils\MailUtil.cs" />
     <Compile Include="Model\MailModel.cs" />
     <Compile Include="RGCommon.cs" />
+    <Compile Include="Utils\RandomUtil.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\MessageWindowViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
