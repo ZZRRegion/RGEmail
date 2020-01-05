@@ -73,7 +73,7 @@ namespace RGMail
             }
             if(this.ViewModel.To.Count == 0)
             {
-                RGCommon.MsgInfo("收件人列表为空！");
+                RGCommon.MsgInfo("收件人列表不能为空,请添加！");
                 return;
             }
             Model.MailModel mailModel = new Model.MailModel()

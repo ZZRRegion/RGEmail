@@ -1,0 +1,6 @@
+<project outputDir="D:\RGEmail\RGMail\bin\Release" baseDir="D:\RGEmail\RGMail\bin\Release" xmlns="http://confuser.codeplex.com">
+  <packer id="compressor" />
+  <module path="RGMail.exe">
+    <rule pattern="true" inherit="false" />
+  </module>
+</project>

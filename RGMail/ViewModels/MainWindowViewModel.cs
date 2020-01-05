@@ -18,7 +18,7 @@ namespace RGMail.ViewModels
         /// <summary>
         /// 收件人邮箱
         /// </summary>
-        private List<string> to;
+        private List<string> to = new List<string>();
         public List<string> To
         {
             get => this.to;
@@ -42,7 +42,7 @@ namespace RGMail.ViewModels
             get => this.body;
             set => this.SetProperty(ref this.body, value);
         }
-        private string subject = "邮件主题";
+        private string subject = "节日快乐";
         /// <summary>
         /// 邮件主题
         /// </summary>
@@ -69,7 +69,7 @@ namespace RGMail.ViewModels
             get => this.mailAddress;
             set => this.SetProperty(ref this.mailAddress, value);
         }
-        private string password;
+        private string password = "123456789";
         /// <summary>
         /// 密码
         /// </summary>
