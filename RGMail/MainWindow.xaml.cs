@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace RGMail
 {
@@ -22,6 +23,7 @@ namespace RGMail
     public partial class MainWindow : Window
     {
         public ViewModels.MainWindowViewModel ViewModel { get; set; }
+        private Thread thread;
         public MainWindow()
         {
             InitializeComponent();
@@ -39,41 +41,19 @@ namespace RGMail
             {
                 string fileName = ofd.FileName;
                 this.ViewModel.To = FileUtil.ReadEmailLines(fileName);
+                if (this.ViewModel.IsAuto)
+                {
+                    this.btnSend_Click(this.btnSend, new RoutedEventArgs());
+                }
             }
         }
 
         private void btnSend_Click(object sender, RoutedEventArgs e)
         {
-            Regex reg = new Regex(@"^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$");
-            bool b = reg.IsMatch(this.ViewModel.MailAddress);
-            if (!b)
+            string result = this.ViewModel.Val();
+            if (!string.IsNullOrWhiteSpace(result))
             {
-                RGCommon.MsgInfo("发件人邮箱不合法！");
-                return;
-            }
-            if (string.IsNullOrWhiteSpace(this.ViewModel.Password))
-            {
-                RGCommon.MsgInfo("发件人密码不能为空！");
-                return;
-            }
-            if (string.IsNullOrWhiteSpace(this.ViewModel.SMTPHost))
-            {
-                RGCommon.MsgInfo("SMTP地址不能为空！");
-                return;
-            }
-            if (string.IsNullOrWhiteSpace(this.ViewModel.Subject))
-            {
-                RGCommon.MsgInfo("主题不能为空！");
-                return;
-            }
-            if (string.IsNullOrWhiteSpace(this.ViewModel.Body))
-            {
-                RGCommon.MsgInfo("正文内容不能为空！");
-                return;
-            }
-            if(this.ViewModel.To.Count == 0)
-            {
-                RGCommon.MsgInfo("收件人列表不能为空,请添加！");
+                RGCommon.MsgInfo(result);
                 return;
             }
             Model.MailModel mailModel = new Model.MailModel()
@@ -88,14 +68,57 @@ namespace RGMail
                 Priority = this.ViewModel.Priority,
             };
             (bool state, string msg) = MailUtil.SendMailUse(mailModel);
-            View.MessageWindow messageWindow = new View.MessageWindow();
-            messageWindow.ViewModel.Info = msg;
-            messageWindow.ShowDialog();
+            RGCommon.MsgInfo(msg);
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             this.ViewModel.Save();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.thread = new Thread(this.Run);
+            this.thread.IsBackground = true;
+            this.thread.Start();
+        }
+        private void Run()
+        {
+            while (true)
+            {
+                if (this.ViewModel.IsIntervalSend)
+                {
+                    string result = this.ViewModel.Val();
+                    if (!string.IsNullOrWhiteSpace(result))
+                    {
+                        this.ViewModel.Error = result;
+                        Thread.Sleep(this.ViewModel.IntervalTime * 1000);
+                        continue;
+                    }
+                    Model.MailModel mailModel = new Model.MailModel()
+                    {
+                        To = this.ViewModel.To,
+                        Subject = this.ViewModel.Subject,
+                        Body = this.ViewModel.Body + Environment.NewLine + "发送时间：" + DateTime.Now,
+                        SMTPHost = this.ViewModel.SMTPHost,
+                        MailAddress = this.ViewModel.MailAddress,
+                        Name = this.ViewModel.Name,
+                        Password = this.ViewModel.Password,
+                        Priority = this.ViewModel.Priority,
+                    };
+                    try
+                    {
+                        (bool state, string msg) = MailUtil.SendMailUse(mailModel);
+                        this.ViewModel.Error = msg;
+                    }
+                    catch(Exception ex)
+                    {
+                        this.ViewModel.Error = ex.Message;
+                    }
+                    Thread.Sleep(this.ViewModel.IntervalTime * 1000);
+                }
+                Thread.Sleep(this.ViewModel.IntervalTime * 1000);
+            }
         }
     }
 }

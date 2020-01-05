@@ -38,5 +38,21 @@ namespace RGMail.View
         {
             this.Close();
         }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (this.ViewModel.IsAutoClose)
+            {
+                System.Windows.Threading.DispatcherTimer timer = new System.Windows.Threading.DispatcherTimer()
+                {
+                    Interval = TimeSpan.FromMilliseconds(this.ViewModel.AutoCloseTime),
+                };
+                timer.Tick += (ss, ee) => {
+                    timer.Stop();
+                    this.Close();
+                };
+                timer.Start();
+            }
+        }
     }
 }

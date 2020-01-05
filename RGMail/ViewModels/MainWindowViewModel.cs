@@ -10,6 +10,7 @@ using System.IO;
 using System.Xml.XPath;
 using System.Xml.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace RGMail.ViewModels
 {
@@ -99,6 +100,36 @@ namespace RGMail.ViewModels
             string result = Newtonsoft.Json.JsonConvert.SerializeObject(this);
             File.WriteAllText(config, result);
         }
+        public string Val()
+        {
+            Regex reg = new Regex(@"^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$");
+            bool b = reg.IsMatch(this.MailAddress);
+            if (!b)
+            {
+                return "发件人邮箱不合法！";
+            }
+            if (string.IsNullOrWhiteSpace(this.Password))
+            {
+                return "发件人密码不能为空！";
+            }
+            if (string.IsNullOrWhiteSpace(this.SMTPHost))
+            {
+                return "SMTP地址不能为空！";
+            }
+            if (string.IsNullOrWhiteSpace(this.Subject))
+            {
+                return "主题不能为空！";
+            }
+            if (string.IsNullOrWhiteSpace(this.Body))
+            {
+                return "正文内容不能为空！";
+            }
+            if (this.To.Count == 0)
+            {
+                return "收件人列表不能为空,请添加！";
+            }
+            return null;
+        }
         public static MainWindowViewModel ReadConfig()
         {
             if (File.Exists(config))
@@ -107,6 +138,33 @@ namespace RGMail.ViewModels
                 return Newtonsoft.Json.JsonConvert.DeserializeObject<MainWindowViewModel>(result);
             }
             return new MainWindowViewModel();
+        }
+        private bool isAuto = true;
+        /// <summary>
+        /// 导入后立即发送
+        /// </summary>
+        public bool IsAuto
+        {
+            get => this.isAuto;
+            set => this.SetProperty(ref this.isAuto, value);
+        }
+        private bool isIntervalSend;
+        /// <summary>
+        /// 是否间隔发送
+        /// </summary>
+        public bool IsIntervalSend
+        {
+            get => this.isIntervalSend;
+            set => this.SetProperty(ref this.isIntervalSend, value);
+        }
+        private int intervalTime = 5;
+        /// <summary>
+        /// 间隔发送时间
+        /// </summary>
+        public int IntervalTime
+        {
+            get => this.intervalTime;
+            set => this.SetProperty(ref this.intervalTime, value);
         }
     }
 }

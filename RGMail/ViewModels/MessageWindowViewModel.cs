@@ -14,5 +14,17 @@ namespace RGMail.ViewModels
             get => this.info;
             set => this.SetProperty(ref this.info, value);
         }
+        private bool isAutoClose;
+        public bool IsAutoClose
+        {
+            get => this.isAutoClose;
+            set => this.SetProperty(ref this.isAutoClose, value);
+        }
+        private int autoCloseTime = 3000;
+        public int AutoCloseTime
+        {
+            get => this.autoCloseTime;
+            set => this.SetProperty(ref this.autoCloseTime, value);
+        }
     }
 }

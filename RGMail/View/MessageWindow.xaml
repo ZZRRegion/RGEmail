@@ -10,6 +10,7 @@
         WindowStyle="None"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
+        Loaded="Window_Loaded"
         Title="MessageWindow" Height="260" Width="400">
     <Border BorderBrush="Black" Background="White" BorderThickness="1">
         <StackPanel>

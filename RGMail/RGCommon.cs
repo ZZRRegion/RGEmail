@@ -8,12 +8,12 @@ namespace RGMail
 {
     public static class RGCommon
     {
-        public static string Version => "0.1.0";
-        public static string VersionTime => "2020-1-5 10:40:00";
+        public static string DispalyTitle => "邮件群发[V0.1.2,2020-1-5 15:30:00]";
         public static MainWindow Main { get; set; }
         public static void MsgInfo(string info)
         {
             View.MessageWindow messageWindow = new View.MessageWindow();
+            messageWindow.ViewModel.IsAutoClose = true;
             messageWindow.ViewModel.Info = info;
             messageWindow.ShowDialog();
         }
