@@ -100,7 +100,11 @@ namespace RGMail.ViewModels
             string result = Newtonsoft.Json.JsonConvert.SerializeObject(this);
             File.WriteAllText(config, result);
         }
-        public string Val()
+        /// <summary>
+        /// 验证数据
+        /// </summary>
+        /// <returns></returns>
+        public string Verification()
         {
             Regex reg = new Regex(@"^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$");
             bool b = reg.IsMatch(this.MailAddress);
@@ -148,23 +152,17 @@ namespace RGMail.ViewModels
             get => this.isAuto;
             set => this.SetProperty(ref this.isAuto, value);
         }
-        private bool isIntervalSend;
-        /// <summary>
-        /// 是否间隔发送
-        /// </summary>
-        public bool IsIntervalSend
+        private bool subjectAddTime;
+        public bool SubjectAddTime
         {
-            get => this.isIntervalSend;
-            set => this.SetProperty(ref this.isIntervalSend, value);
+            get => this.subjectAddTime;
+            set => this.SetProperty(ref this.subjectAddTime, value);
         }
-        private int intervalTime = 5;
-        /// <summary>
-        /// 间隔发送时间
-        /// </summary>
-        public int IntervalTime
+        private bool bodyAddTime;
+        public bool BodyAddTime
         {
-            get => this.intervalTime;
-            set => this.SetProperty(ref this.intervalTime, value);
+            get => this.bodyAddTime;
+            set => this.SetProperty(ref this.bodyAddTime, value);
         }
     }
 }

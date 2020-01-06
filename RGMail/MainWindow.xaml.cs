@@ -23,7 +23,6 @@ namespace RGMail
     public partial class MainWindow : Window
     {
         public ViewModels.MainWindowViewModel ViewModel { get; set; }
-        private Thread thread;
         public MainWindow()
         {
             InitializeComponent();
@@ -52,7 +51,7 @@ namespace RGMail
 
         private void btnSend_Click(object sender, RoutedEventArgs e)
         {
-            string result = this.ViewModel.Val();
+            string result = this.ViewModel.Verification();
             if (!string.IsNullOrWhiteSpace(result))
             {
                 RGCommon.MsgInfo(result);
@@ -69,6 +68,14 @@ namespace RGMail
                 Password = this.ViewModel.Password,
                 Priority = this.ViewModel.Priority,
             };
+            if (this.ViewModel.SubjectAddTime)
+            {
+                mailModel.Subject += DateTime.Now;
+            }
+            if (this.ViewModel.BodyAddTime)
+            {
+                mailModel.Body += DateTime.Now;
+            }
             (bool state, string msg) = MailUtil.SendMailUse(mailModel);
             RGCommon.MsgInfo(msg);
         }
@@ -80,47 +87,7 @@ namespace RGMail
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            this.thread = new Thread(this.Run);
-            this.thread.IsBackground = true;
-            this.thread.Start();
-        }
-        private void Run()
-        {
-            while (true)
-            {
-                if (this.ViewModel.IsIntervalSend)
-                {
-                    string result = this.ViewModel.Val();
-                    if (!string.IsNullOrWhiteSpace(result))
-                    {
-                        this.ViewModel.Error = result;
-                        Thread.Sleep(this.ViewModel.IntervalTime * 1000);
-                        continue;
-                    }
-                    Model.MailModel mailModel = new Model.MailModel()
-                    {
-                        To = this.ViewModel.To,
-                        Subject = this.ViewModel.Subject,
-                        Body = this.ViewModel.Body + Environment.NewLine + "发送时间：" + DateTime.Now,
-                        SMTPHost = this.ViewModel.SMTPHost,
-                        MailAddress = this.ViewModel.MailAddress,
-                        Name = this.ViewModel.Name,
-                        Password = this.ViewModel.Password,
-                        Priority = this.ViewModel.Priority,
-                    };
-                    try
-                    {
-                        (bool state, string msg) = MailUtil.SendMailUse(mailModel);
-                        this.ViewModel.Error = msg;
-                    }
-                    catch(Exception ex)
-                    {
-                        this.ViewModel.Error = ex.Message;
-                    }
-                    Thread.Sleep(this.ViewModel.IntervalTime * 1000);
-                }
-                Thread.Sleep(this.ViewModel.IntervalTime * 1000);
-            }
+            
         }
     }
 }

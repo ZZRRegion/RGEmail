@@ -43,9 +43,6 @@
                 <DockPanel>
                     <Button Background="Red" DockPanel.Dock="Top" ToolTip="txt文件，每行一个邮箱地址" x:Name="btnImport" Click="btnImport_Click" Content="导入收件人邮箱"/>
                     <CheckBox IsChecked="{Binding IsAuto,Mode=TwoWay}" DockPanel.Dock="Top" Content="导入后，立即发送"/>
-                    <CheckBox x:Name="ckbIsIntervalSend" IsChecked="{Binding IsIntervalSend,Mode=TwoWay}" DockPanel.Dock="Top" Content="启用间隔发送"/>
-                    <TextBlock IsEnabled="{Binding ElementName=ckbIsIntervalSend,Path=IsChecked}" Text="间隔时间：秒" DockPanel.Dock="Top"/>
-                    <TextBox InputMethod.IsInputMethodEnabled="False" Text="{Binding IntervalTime,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Top"/>
                     <GroupBox x:Name="gbox" DockPanel.Dock="Top" Margin="0,5,0,0" Header="收件人列表">
                         <ListBox x:Name="lst" ItemsSource="{Binding To}">
                         </ListBox>
@@ -56,12 +53,14 @@
         <DockPanel Grid.Column="1">
             <TextBlock FontSize="20" Foreground="Green" DockPanel.Dock="Top" Text="填写主题"/>
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
-                <CheckBox Content="主题后面加日期时间"/>
+                <CheckBox IsChecked="{Binding SubjectAddTime,Mode=TwoWay}" Content="主题后面加日期时间"/>
             </StackPanel>
             <TextBox Text="{Binding Subject,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Top"/>
             <TextBlock FontSize="20" Foreground="Green" DockPanel.Dock="Top" Text="填写正文内容"/>
-            
-            <TextBox Text="{Binding Body,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Top" ScrollViewer.VerticalScrollBarVisibility="Visible" TextWrapping="Wrap"/>
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                <CheckBox IsChecked="{Binding BodyAddTime}" Content="正文内容后面加日期时间"/>
+            </StackPanel>
+            <TextBox AcceptsReturn="True" Text="{Binding Body,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Top" ScrollViewer.VerticalScrollBarVisibility="Visible" TextWrapping="Wrap"/>
         </DockPanel>
     </Grid>
 </Window>
