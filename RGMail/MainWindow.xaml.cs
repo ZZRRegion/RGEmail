@@ -32,7 +32,7 @@ namespace RGMail
             this.DataContext = this.ViewModel;
         }
 
-        private void btnImport_Click(object sender, RoutedEventArgs e)
+        private async void btnImport_Click(object sender, RoutedEventArgs e)
         {
             Microsoft.Win32.OpenFileDialog ofd = new Microsoft.Win32.OpenFileDialog();
             ofd.Filter = "txt|*.txt";
@@ -40,7 +40,9 @@ namespace RGMail
             if(result.HasValue && result.Value)
             {
                 string fileName = ofd.FileName;
-                this.ViewModel.To = FileUtil.ReadEmailLines(fileName);
+                this.ViewModel.Error = "导入中...";
+                this.ViewModel.To = await FileUtil.ReadEmailLines(fileName);
+                this.ViewModel.Error = "导入成功！";
                 if (this.ViewModel.IsAuto)
                 {
                     this.btnSend_Click(this.btnSend, new RoutedEventArgs());

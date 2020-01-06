@@ -10,23 +10,29 @@ namespace RGMail
 {
     public static class FileUtil
     {
-        public static List<string> ReadEmailLines(string fileName)
+        public static async Task<List<string>> ReadEmailLines(string fileName)
         {
             if (!File.Exists(fileName))
             {
                 throw new FileNotFoundException($"文件不存在：{fileName}");
             }
             Regex reg = new Regex(@"^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$");
-            string[] lines = File.ReadAllLines(fileName);
+            StreamReader sr = new StreamReader(fileName);
+            string line = null;
             List<string> lst = new List<string>();
-            foreach (string item in lines)
+            long count = 0;
+            while ((line = await sr.ReadLineAsync()) != null)
             {
-                if (reg.IsMatch(item))
+                //await Task.Delay(1);
+                System.Windows.Forms.Application.DoEvents();
+                Console.WriteLine(count++);
+                if (reg.IsMatch(line))
                 {
-                    if(!lst.Contains(item))
-                        lst.Add(item);
+                    if (!lst.Contains(line))
+                        lst.Add(line);
                 }
             }
+            sr.Close();
             return lst;
         }
     }
