@@ -12,7 +12,7 @@
         Closing="Window_Closing"
         TextElement.FontWeight="Medium"
         TextElement.FontSize="14"
-        FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
+        
         WindowStartupLocation="CenterScreen"
         Title="{Binding Source={x:Static local:RGCommon.DispalyTitle}}"
         Height="650" Width="800">
@@ -76,7 +76,7 @@
                     </mater:Chip.Icon>
                 </mater:Chip>
                 <StackPanel DockPanel.Dock="Top">
-                    <TextBlock Text="间隔时间:秒"/>
+                    <TextBlock Text="发送间隔时间:秒"/>
                     <TextBox InputMethod.IsInputMethodEnabled="False" Width="80" HorizontalAlignment="Left" Text="{Binding SendInterval}" />
                 </StackPanel>
                 <CheckBox IsChecked="{Binding IsPause,Mode=TwoWay}" Content="暂停发送" DockPanel.Dock="Top"/>

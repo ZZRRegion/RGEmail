@@ -205,7 +205,7 @@ namespace RGMail.ViewModels
             get => this.process;
             set => this.SetProperty(ref this.process, value);
         }
-        private int sendInterval;
+        private int sendInterval = 1;
         /// <summary>
         /// 发送间隔
         /// </summary>

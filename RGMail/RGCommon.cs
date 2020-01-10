@@ -8,7 +8,7 @@ namespace RGMail
 {
     public static class RGCommon
     {
-        public static string DispalyTitle => "邮件群发[V0.1.3,2020-1-10 23:30:00]";
+        public static string DispalyTitle => "邮件群发[V0.1.4,2020-1-10 23:30:00]";
         public static MainWindow Main { get; set; }
         public static void MsgInfo(string info)
         {
