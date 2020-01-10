@@ -70,6 +70,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\CollectionCountConverter.cs" />
+    <Compile Include="Model\SendMail.cs" />
     <Compile Include="Utils\FileUtil.cs" />
     <Compile Include="Utils\MailUtil.cs" />
     <Compile Include="Model\MailModel.cs" />

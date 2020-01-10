@@ -9,7 +9,7 @@ namespace RGMail
 {
     public static class MailUtil
     {
-        public static (bool,string) SendMailUse(Model.MailModel mail)
+        public static async Task SendMailUse(Model.MailModel mail)
         {
             MailMessage msg = new MailMessage();
             foreach(string item in mail.To)
@@ -30,6 +30,10 @@ namespace RGMail
                 {
                     RGCommon.Main.ViewModel.Error = smtpex.Message;
                 }
+                else
+                {
+                    RGCommon.Main.ViewModel.RunEmail = "发送成功！";
+                }
             };
             client.Credentials = new System.Net.NetworkCredential(mail.MailAddress, mail.Password);
             //注册的邮箱和密码    
@@ -37,13 +41,14 @@ namespace RGMail
             object userState = msg;
             try
             {
-                client.SendAsync(msg, userState);
-                return (true, "发送成功！");
+                //client.SendAsync(msg, userState);
+                await client.SendMailAsync(msg);
             }
             catch (SmtpException ex)
             {
-                return (false, ex.Message);
+                RGCommon.Main.ViewModel.Error = ex.Message;
             }
+            return;
         }
     }
 }

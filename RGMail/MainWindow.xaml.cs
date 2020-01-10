@@ -23,14 +23,25 @@ namespace RGMail
     public partial class MainWindow : Window
     {
         public ViewModels.MainWindowViewModel ViewModel { get; set; }
+        private CancellationTokenSource CancellationTokenSourceImportRecive;
+        private CancellationTokenSource CancellationTokenSourceImportSend;
+        /// <summary>
+        /// 取消发送
+        /// </summary>
+        private bool isCancelSend;
         public MainWindow()
         {
             InitializeComponent();
+            FileUtil.ImportReciveEmailEvent += (msg) => {
+                this.ViewModel.ReciveEamil = msg;
+            };
+            FileUtil.ImportSendEmailEvent += (msg) => {
+                this.ViewModel.SendEmail = msg;
+            };
             RGCommon.Main = this;
             this.ViewModel = ViewModels.MainWindowViewModel.ReadConfig();
             this.DataContext = this.ViewModel;
         }
-
         private async void btnImport_Click(object sender, RoutedEventArgs e)
         {
             Microsoft.Win32.OpenFileDialog ofd = new Microsoft.Win32.OpenFileDialog();
@@ -38,18 +49,20 @@ namespace RGMail
             bool? result = ofd.ShowDialog();
             if(result.HasValue && result.Value)
             {
-                string fileName = ofd.FileName;
-                this.ViewModel.Error = "导入中...";
-                this.ViewModel.To = await FileUtil.ReadEmailLines(fileName);
-                this.ViewModel.Error = "导入成功！";
-                if (this.ViewModel.IsAuto)
+                this.isCancelSend = true;
+                if(this.CancellationTokenSourceImportRecive != null)
                 {
-                    this.btnSend_Click(this.btnSend, new RoutedEventArgs());
+                    this.CancellationTokenSourceImportRecive.Cancel();
                 }
+                this.CancellationTokenSourceImportRecive = new CancellationTokenSource();
+                string fileName = ofd.FileName;
+                this.ViewModel.To.Clear();
+                await FileUtil.ReadEmailLines(fileName, this.ViewModel.To, this.CancellationTokenSourceImportRecive.Token);
+                this.isCancelSend = false;
             }
         }
 
-        private void btnSend_Click(object sender, RoutedEventArgs e)
+        private async void btnSend_Click(object sender, RoutedEventArgs e)
         {
             string result = this.ViewModel.Verification();
             if (!string.IsNullOrWhiteSpace(result))
@@ -57,27 +70,60 @@ namespace RGMail
                 RGCommon.MsgInfo(result);
                 return;
             }
-            Model.MailModel mailModel = new Model.MailModel()
+            this.ViewModel.IsPause = false;
+            int indexSEmail = 0;//当前使用发件人邮箱的下标
+            int indexSend = 0;//当前发送的第几条
+            int allCount = this.ViewModel.To.Count;//总共条数
+            Model.SendMail[] sendLst = new Model.SendMail[this.ViewModel.Send.Count];
+            this.ViewModel.Send.CopyTo(sendLst, 0);
+            string[] reciveLst = new string[this.ViewModel.To.Count];
+            this.ViewModel.To.CopyTo(reciveLst, 0);
+            foreach(string item in reciveLst)
             {
-                To = this.ViewModel.To,
-                Subject = this.ViewModel.Subject,
-                Body = this.ViewModel.Body.Replace("${DateTime}", DateTime.Now.ToString()),
-                SMTPHost = this.ViewModel.SMTPHost,
-                MailAddress = this.ViewModel.MailAddress,
-                Name = this.ViewModel.Name,
-                Password = this.ViewModel.Password,
-                Priority = this.ViewModel.Priority,
-            };
-            if (this.ViewModel.SubjectAddTime)
-            {
-                mailModel.Subject += DateTime.Now;
+                
+                if (this.isCancelSend)
+                {
+                    this.ViewModel.RunEmail = "正在导入收件/发件人邮箱，已停止发送！";
+                    break;
+                }
+                pause:
+                if (this.ViewModel.IsPause)
+                {
+                    this.ViewModel.RunEmail = "已暂停发送";
+                    await Task.Delay(100);
+                    goto pause;
+                }
+                indexSend++;
+                this.ViewModel.Process = (indexSend * 100.0 / allCount);
+                System.Windows.Forms.Application.DoEvents();
+                if (indexSEmail >= sendLst.Length)
+                    indexSEmail = 0;
+                Model.SendMail sendMail = sendLst[indexSEmail++];
+                this.ViewModel.RunEmail = $"正在使用{sendMail.Address}发送到:{item}";
+                Model.MailModel mailModel = new Model.MailModel()
+                {
+                    To = new List<string>() { item },
+                    Subject = this.ViewModel.Subject,
+                    Body = this.ViewModel.Body,
+                    SMTPHost = this.ViewModel.SMTPHost,
+                    MailAddress = sendMail.Address,
+                    Name = this.ViewModel.Name,
+                    Password = sendMail.Password,
+                    Priority = System.Net.Mail.MailPriority.Normal,
+                };
+                if (this.ViewModel.SubjectAddTime)
+                {
+                    mailModel.Subject += DateTime.Now;
+                }
+                if (this.ViewModel.BodyAddTime)
+                {
+                    mailModel.Body += DateTime.Now;
+                }
+                await MailUtil.SendMailUse(mailModel);
+                await Task.Delay(1000 * this.ViewModel.SendInterval);
             }
-            if (this.ViewModel.BodyAddTime)
-            {
-                mailModel.Body += DateTime.Now;
-            }
-            (bool state, string msg) = MailUtil.SendMailUse(mailModel);
-            RGCommon.MsgInfo(msg);
+            if(!this.isCancelSend)
+            RGCommon.MsgInfo("发送完成！");
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -88,6 +134,28 @@ namespace RGMail
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             
+        }
+
+        private async void btnImportSend_Click(object sender, RoutedEventArgs e)
+        {
+            Microsoft.Win32.OpenFileDialog ofd = new Microsoft.Win32.OpenFileDialog();
+            ofd.Filter = "txt|*.txt";
+            bool? result = ofd.ShowDialog();
+            if (result.HasValue && result.Value)
+            {
+                this.isCancelSend = true;
+                if(this.CancellationTokenSourceImportSend != null)
+                {
+                    this.CancellationTokenSourceImportSend.Cancel();
+                }
+                this.CancellationTokenSourceImportSend = new CancellationTokenSource();
+                await Task.Delay(1000);
+
+                string fileName = ofd.FileName;
+                this.ViewModel.Send.Clear();
+                await FileUtil.ReadSendEmailLines(fileName, this.ViewModel.Send, this.CancellationTokenSourceImportSend.Token);
+                this.isCancelSend = false;
+            }
         }
     }
 }
