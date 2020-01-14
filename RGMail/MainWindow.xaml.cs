@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Text.RegularExpressions;
 using System.Threading;
+using RGMail.Utils;
 
 namespace RGMail
 {
@@ -111,14 +112,6 @@ namespace RGMail
                     Password = sendMail.Password,
                     Priority = System.Net.Mail.MailPriority.Normal,
                 };
-                if (this.ViewModel.SubjectAddTime)
-                {
-                    mailModel.Subject += DateTime.Now;
-                }
-                if (this.ViewModel.BodyAddTime)
-                {
-                    mailModel.Body += DateTime.Now;
-                }
                 await MailUtil.SendMailUse(mailModel);
                 await Task.Delay(1000 * this.ViewModel.SendInterval);
             }
@@ -156,6 +149,26 @@ namespace RGMail
                 await FileUtil.ReadSendEmailLines(fileName, this.ViewModel.Send, this.CancellationTokenSourceImportSend.Token);
                 this.isCancelSend = false;
             }
+        }
+
+        private void btnSubjectRandom_Click(object sender, RoutedEventArgs e)
+        {
+            int count = this.ViewModel.SubjectCount;
+            if(count <= 0)
+            {
+                count = 1;
+            }
+            this.ViewModel.Subject = RandomUtil.GenerateRandomLetter(count) + this.ViewModel.Subject;
+        }
+
+        private void btnBodyRandom_Click(object sender, RoutedEventArgs e)
+        {
+            int count = this.ViewModel.BodyCount;
+            if (count <= 0)
+            {
+                count = 1;
+            }
+            this.ViewModel.Body = RandomUtil.GenerateRandomLetter(count) + this.ViewModel.Body;
         }
     }
 }

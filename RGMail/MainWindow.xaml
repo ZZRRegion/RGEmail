@@ -91,12 +91,15 @@
                 <ProgressBar Height="10" Value="{Binding Process}" x:Name="pb" DockPanel.Dock="Top" Minimum="0" Maximum="100"/>
                 <TextBlock FontSize="20" Foreground="Green" DockPanel.Dock="Top" Text="填写主题"/>
                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
-                    <CheckBox IsChecked="{Binding SubjectAddTime,Mode=TwoWay}" Content="主题后面加日期时间"/>
+                    <ComboBox SelectedValue="{Binding SubjectCount}" Width="100" ItemStringFormat="随机个数{0}" ItemsSource="{x:Static local:RGCommon.RandomNum}">
+                    </ComboBox>
+                    <Button Content="随机主题字母" x:Name="btnSubjectRandom" Click="btnSubjectRandom_Click" />
                 </StackPanel>
                 <TextBox Text="{Binding Subject,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Top"/>
                 <TextBlock FontSize="20" Foreground="Green" DockPanel.Dock="Top" Text="填写正文内容"/>
                 <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-                    <CheckBox IsChecked="{Binding BodyAddTime}" Content="正文内容后面加日期时间"/>
+                    <ComboBox SelectedValue="{Binding BodyCount}" ItemStringFormat="随机个数{0}" Width="100" ItemsSource="{x:Static local:RGCommon.RandomNum}"/>
+                    <Button Content="随机正文字母" x:Name="btnBodyRandom" Click="btnBodyRandom_Click"/>
                 </StackPanel>
                 <TextBox AcceptsReturn="True" Text="{Binding Body,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Top" ScrollViewer.VerticalScrollBarVisibility="Visible" TextWrapping="Wrap"/>
             </DockPanel>

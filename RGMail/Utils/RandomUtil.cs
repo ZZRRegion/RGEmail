@@ -36,5 +36,22 @@ namespace RGMail.Utils
             }
             return sb.ToString();
         }
+        /// <summary>
+        /// 随机生成字母
+        /// </summary>
+        /// <param name="Length"></param>
+        /// <returns></returns>
+        public static string GenerateRandomLetter(int Length)
+        {
+            char[] Pattern = new char[] { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
+            StringBuilder sb = new StringBuilder();
+            int n = Pattern.Length;
+            for (int i = 0; i < Length; i++)
+            {
+                int rnd = rand.Next(0, n);
+                sb.Append(Pattern[rnd]);
+            }
+            return sb.ToString();
+        }
     }
 }

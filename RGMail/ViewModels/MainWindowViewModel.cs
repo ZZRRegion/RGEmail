@@ -134,23 +134,23 @@ namespace RGMail.ViewModels
             }
             return new MainWindowViewModel();
         }
-        private bool subjectAddTime;
+        private int subjectCount = 1;
         /// <summary>
-        /// 主题后加日期
+        /// 主题前面随机字母数量
         /// </summary>
-        public bool SubjectAddTime
+        public int SubjectCount
         {
-            get => this.subjectAddTime;
-            set => this.SetProperty(ref this.subjectAddTime, value);
+            get => this.subjectCount;
+            set => this.SetProperty(ref this.subjectCount, value);
         }
-        private bool bodyAddTime;
+        private int bodyCount = 2;
         /// <summary>
-        /// 正文内容加日期
+        /// 正文内容前随机字母数量
         /// </summary>
-        public bool BodyAddTime
+        public int BodyCount
         {
-            get => this.bodyAddTime;
-            set => this.SetProperty(ref this.bodyAddTime, value);
+            get => this.bodyCount;
+            set => this.SetProperty(ref this.bodyCount, value);
         }
         /// <summary>
         /// 导入收件人邮箱提示
