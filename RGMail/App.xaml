@@ -13,6 +13,7 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <converters:CollectionCountConverter x:Key="ccc"/>
+            <converters:Number2Visibility x:Key="n2v"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

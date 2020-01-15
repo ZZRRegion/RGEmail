@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -25,6 +26,12 @@ namespace RGMail.Utils
         {
             string text = await httpClient.GetStringAsync(YanURL);
             return text;
+        }
+        public static async Task<Stream> GetIPST()
+        {
+            string ipst = "https://api.ooopn.com/ipst/api.php";
+            Stream stream = await httpClient.GetStreamAsync(ipst);
+            return stream;
         }
     }
 }

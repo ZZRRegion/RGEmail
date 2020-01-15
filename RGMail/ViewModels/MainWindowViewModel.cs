@@ -11,6 +11,7 @@ using System.Xml.XPath;
 using System.Xml.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Windows.Media;
 
 namespace RGMail.ViewModels
 {
@@ -246,6 +247,18 @@ namespace RGMail.ViewModels
         {
             get => this.setBodyYan;
             set => this.SetProperty(ref this.setBodyYan, value);
+        }
+        private bool refreshFuLi;
+        public bool RefreshFuLi
+        {
+            get => this.refreshFuLi;
+            set => this.SetProperty(ref this.refreshFuLi, value);
+        }
+        private string fuLiImg = "https://api.ooopn.com/image/beauty/api.php";
+        public string FuLiImg
+        {
+            get => this.fuLiImg;
+            set => this.SetProperty(ref this.fuLiImg, value);
         }
     }
 }

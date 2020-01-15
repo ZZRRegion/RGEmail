@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using System.Text.RegularExpressions;
 using System.Threading;
 using RGMail.Utils;
+using System.IO;
 
 namespace RGMail
 {
@@ -164,6 +165,17 @@ namespace RGMail
             {
                 string url = await NetUtil.GetImageURL();
                 this.img.Source = new BitmapImage(new Uri(url));
+                await Task.Run(async() => {
+                    while (true)
+                    {
+                        if (this.ViewModel.RefreshFuLi)
+                        {
+                            string str = RandomUtil.GenerateRandomLetter(20);
+                            this.ViewModel.FuLiImg = $"https://api.ooopn.com/image/beauty/api.php?{str}";
+                        }
+                        await Task.Delay(10000);
+                    }
+                });
             }
             catch(Exception ex)
             {

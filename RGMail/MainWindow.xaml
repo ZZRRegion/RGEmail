@@ -14,10 +14,9 @@
         
         WindowStartupLocation="CenterScreen"
         Title="{Binding Source={x:Static local:RGCommon.DispalyTitle}}"
-        Height="650" Width="800">
+        Height="650" Width="1000">
     <Grid>
-        <Image Stretch="Fill" x:Name="img"/>
-        <TabControl Background="White" Opacity="0.9" TabStripPlacement="Top">
+        <TabControl x:Name="tab" Background="White" TabStripPlacement="Top">
             <TabItem Header="1、发件人配置">
                 <GroupBox Header="发件人配置">
                     <DockPanel>
@@ -71,20 +70,30 @@
             </TabItem>
             <TabItem Header="3、发送配置">
                 <DockPanel>
-                    <mater:Chip x:Name="btnSend" Click="btnSend_Click" Foreground="White" DockPanel.Dock="Top" Background="{StaticResource PrimaryHueDarkBrush}" Content="立即发送">
-                        <mater:Chip.Icon>
-                            <mater:PackIcon Kind="Send" />
-                        </mater:Chip.Icon>
-                    </mater:Chip>
-                    <StackPanel DockPanel.Dock="Top">
-                        <TextBlock Text="发送间隔时间:秒"/>
-                        <TextBox InputMethod.IsInputMethodEnabled="False" Width="80" HorizontalAlignment="Left" Text="{Binding SendInterval}" />
-                    </StackPanel>
-                    <CheckBox IsChecked="{Binding IsPause,Mode=TwoWay}" Content="暂停发送" DockPanel.Dock="Top"/>
-                    <TextBlock DockPanel.Dock="Top" Foreground="Red">
-                    <Run Text="发送状态："/>
-                    <Run Text="{Binding RunEmail}"/>
-                    </TextBlock>
+                    <Grid DockPanel.Dock="Top">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <mater:Chip x:Name="btnSend" Click="btnSend_Click" Foreground="White" Background="{StaticResource PrimaryHueDarkBrush}" Content="立即发送">
+                                <mater:Chip.Icon>
+                                    <mater:PackIcon Kind="Send" />
+                                </mater:Chip.Icon>
+                            </mater:Chip>
+                            <StackPanel>
+                                <TextBlock Text="发送间隔时间:秒"/>
+                                <TextBox InputMethod.IsInputMethodEnabled="False" Width="80" HorizontalAlignment="Left" Text="{Binding SendInterval}" />
+                            </StackPanel>
+                            <CheckBox IsChecked="{Binding IsPause,Mode=TwoWay}" Content="暂停发送"/>
+                            <TextBlock DockPanel.Dock="Top" Foreground="Red">
+                                <Run Text="发送状态："/>
+                                <Run Text="{Binding RunEmail}"/>
+                            </TextBlock>
+                        </StackPanel>
+                        <Image Grid.Column="1" Width="500" Stretch="Fill" Height="210" Source="https://api.ooopn.com/ipst/api.php" HorizontalAlignment="Right"/>
+                    </Grid>
+                    
                     <TextBlock Foreground="Blue" DockPanel.Dock="Top">
                     <Run Text="当前进度："/>
                     <Run Text="{Binding Process,StringFormat={}{0:F2}%}"/>
@@ -108,6 +117,15 @@
                     <TextBox AcceptsReturn="True" Text="{Binding Body,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Top" ScrollViewer.VerticalScrollBarVisibility="Visible" TextWrapping="Wrap"/>
                 </DockPanel>
             </TabItem>
+            <TabItem Opacity="1" Header="福利图" Tag="1">
+                <Grid>
+                    <Image x:Name="imgFuLi" Source="{Binding FuLiImg}"/>
+                    <StackPanel VerticalAlignment="Top" Orientation="Horizontal">
+                        <CheckBox IsChecked="{Binding RefreshFuLi,Mode=TwoWay}" Content="自动刷新(10s)"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
         </TabControl>
+        <Image Visibility="{Binding ElementName=tab,Path=SelectedItem.Tag,Converter={StaticResource n2v}}" IsHitTestVisible="False" Opacity="0.15" Stretch="Fill" x:Name="img"/>
     </Grid>
 </Window>
