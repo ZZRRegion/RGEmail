@@ -7,7 +7,6 @@
         xmlns:mater="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-        Background="{DynamicResource MaterialDesignPaper}"
         Loaded="Window_Loaded"
         Closing="Window_Closing"
         TextElement.FontWeight="Medium"
@@ -16,93 +15,99 @@
         WindowStartupLocation="CenterScreen"
         Title="{Binding Source={x:Static local:RGCommon.DispalyTitle}}"
         Height="650" Width="800">
-    <TabControl TabStripPlacement="Top">
-        <TabItem Header="1、发件人配置">
-            <GroupBox Header="发件人配置">
-                <DockPanel>
-                    <mater:Chip x:Name="btnImportSend" Click="btnImportSend_Click" ToolTip="txt文件，邮箱号与密码使用空格隔开" Foreground="White" Background="{StaticResource PrimaryHueDarkBrush}" DockPanel.Dock="Top" Content="导入发件人邮箱">
-                        <mater:Chip.Icon>
-                            <mater:PackIcon Kind="AccountCardDetails" />
-                        </mater:Chip.Icon>
-                    </mater:Chip>
-                    <TextBlock DockPanel.Dock="Top" Foreground="Red">
+    <Grid>
+        <Image Stretch="Fill" x:Name="img"/>
+        <TabControl Background="White" Opacity="0.9" TabStripPlacement="Top">
+            <TabItem Header="1、发件人配置">
+                <GroupBox Header="发件人配置">
+                    <DockPanel>
+                        <mater:Chip x:Name="btnImportSend" Click="btnImportSend_Click" ToolTip="txt文件，邮箱号与密码使用空格隔开" Foreground="White" Background="{StaticResource PrimaryHueDarkBrush}" DockPanel.Dock="Top" Content="导入发件人邮箱">
+                            <mater:Chip.Icon>
+                                <mater:PackIcon Kind="AccountCardDetails" />
+                            </mater:Chip.Icon>
+                        </mater:Chip>
+                        <TextBlock DockPanel.Dock="Top" Foreground="Red">
                         <Run Text="导入状态："/>
                         <Run Text="{Binding SendEmail}"/>
-                    </TextBlock>
-                    <GroupBox Header="发件人列表">
-                        <DockPanel>
-                            <TextBlock DockPanel.Dock="Top" Text="{Binding Path=Send,Converter={StaticResource ccc},StringFormat=发件人数量：{0}}"/>
-                            <ListView ItemsSource="{Binding Send}">
-                                <ListView.View>
-                                    <GridView>
-                                        <GridViewColumn Header="邮箱" DisplayMemberBinding="{Binding Address}"/>
-                                        <GridViewColumn Header="密码" DisplayMemberBinding="{Binding Password}"/>
-                                    </GridView>
-                                </ListView.View>
-                            </ListView>
-                        </DockPanel>
-                    </GroupBox>
-                </DockPanel>
-            </GroupBox>
-        </TabItem>
-        <TabItem Header="2、收件人配置">
-            <GroupBox DockPanel.Dock="Top" Header="收件人配置">
-                <DockPanel>
-                    <mater:Chip ToolTip="txt文件，每个邮箱一行" Click="btnImport_Click" Foreground="White" Background="{StaticResource PrimaryHueDarkBrush}" DockPanel.Dock="Top" Content="导入收件人邮箱">
-                        <mater:Chip.Icon>
-                            <mater:PackIcon Kind="AccountCardDetails" />
-                        </mater:Chip.Icon>
-                    </mater:Chip>
-                    <TextBlock DockPanel.Dock="Top" Foreground="Red">
+                        </TextBlock>
+                        <GroupBox Header="发件人列表">
+                            <DockPanel>
+                                <TextBlock DockPanel.Dock="Top" Text="{Binding Path=Send,Converter={StaticResource ccc},StringFormat=发件人数量：{0}}"/>
+                                <ListView ItemsSource="{Binding Send}">
+                                    <ListView.View>
+                                        <GridView>
+                                            <GridViewColumn Header="邮箱" DisplayMemberBinding="{Binding Address}"/>
+                                            <GridViewColumn Header="密码" DisplayMemberBinding="{Binding Password}"/>
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+                            </DockPanel>
+                        </GroupBox>
+                    </DockPanel>
+                </GroupBox>
+            </TabItem>
+            <TabItem Header="2、收件人配置">
+                <GroupBox DockPanel.Dock="Top" Header="收件人配置">
+                    <DockPanel>
+                        <mater:Chip ToolTip="txt文件，每个邮箱一行" Click="btnImport_Click" Foreground="White" Background="{StaticResource PrimaryHueDarkBrush}" DockPanel.Dock="Top" Content="导入收件人邮箱">
+                            <mater:Chip.Icon>
+                                <mater:PackIcon Kind="AccountCardDetails" />
+                            </mater:Chip.Icon>
+                        </mater:Chip>
+                        <TextBlock DockPanel.Dock="Top" Foreground="Red">
                         <Run Text="导入状态："/>
                         <Run Text="{Binding ReciveEamil}"/>
-                    </TextBlock>
-                    <GroupBox x:Name="gbox" DockPanel.Dock="Top" Header="收件人列表">
-                        <DockPanel>
-                            <TextBlock DockPanel.Dock="Top" Foreground="Blue" Text="{Binding Path=To,Converter={StaticResource ccc},StringFormat=收件人数量：{0}}"/>
-                            <ListBox x:Name="lst" ItemsSource="{Binding To}">
-                            </ListBox>
-                        </DockPanel>
-                    </GroupBox>
-                </DockPanel>
-            </GroupBox>
+                        </TextBlock>
+                        <GroupBox x:Name="gbox" DockPanel.Dock="Top" Header="收件人列表">
+                            <DockPanel>
+                                <TextBlock DockPanel.Dock="Top" Foreground="Blue" Text="{Binding Path=To,Converter={StaticResource ccc},StringFormat=收件人数量：{0}}"/>
+                                <ListBox x:Name="lst" ItemsSource="{Binding To}">
+                                </ListBox>
+                            </DockPanel>
+                        </GroupBox>
+                    </DockPanel>
+                </GroupBox>
 
-        </TabItem>
-        <TabItem Header="3、发送配置">
-            <DockPanel>
-                <mater:Chip x:Name="btnSend" Click="btnSend_Click" Foreground="White" DockPanel.Dock="Top" Background="{StaticResource PrimaryHueDarkBrush}" Content="立即发送">
-                    <mater:Chip.Icon>
-                        <mater:PackIcon Kind="Send" />
-                    </mater:Chip.Icon>
-                </mater:Chip>
-                <StackPanel DockPanel.Dock="Top">
-                    <TextBlock Text="发送间隔时间:秒"/>
-                    <TextBox InputMethod.IsInputMethodEnabled="False" Width="80" HorizontalAlignment="Left" Text="{Binding SendInterval}" />
-                </StackPanel>
-                <CheckBox IsChecked="{Binding IsPause,Mode=TwoWay}" Content="暂停发送" DockPanel.Dock="Top"/>
-                <TextBlock DockPanel.Dock="Top" Foreground="Red">
+            </TabItem>
+            <TabItem Header="3、发送配置">
+                <DockPanel>
+                    <mater:Chip x:Name="btnSend" Click="btnSend_Click" Foreground="White" DockPanel.Dock="Top" Background="{StaticResource PrimaryHueDarkBrush}" Content="立即发送">
+                        <mater:Chip.Icon>
+                            <mater:PackIcon Kind="Send" />
+                        </mater:Chip.Icon>
+                    </mater:Chip>
+                    <StackPanel DockPanel.Dock="Top">
+                        <TextBlock Text="发送间隔时间:秒"/>
+                        <TextBox InputMethod.IsInputMethodEnabled="False" Width="80" HorizontalAlignment="Left" Text="{Binding SendInterval}" />
+                    </StackPanel>
+                    <CheckBox IsChecked="{Binding IsPause,Mode=TwoWay}" Content="暂停发送" DockPanel.Dock="Top"/>
+                    <TextBlock DockPanel.Dock="Top" Foreground="Red">
                     <Run Text="发送状态："/>
                     <Run Text="{Binding RunEmail}"/>
-                </TextBlock>
-                <TextBlock Foreground="Blue" DockPanel.Dock="Top">
+                    </TextBlock>
+                    <TextBlock Foreground="Blue" DockPanel.Dock="Top">
                     <Run Text="当前进度："/>
                     <Run Text="{Binding Process,StringFormat={}{0:F2}%}"/>
-                </TextBlock>
-                <ProgressBar Height="10" Value="{Binding Process}" x:Name="pb" DockPanel.Dock="Top" Minimum="0" Maximum="100"/>
-                <TextBlock FontSize="20" Foreground="Green" DockPanel.Dock="Top" Text="填写主题"/>
-                <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
-                    <ComboBox SelectedValue="{Binding SubjectCount}" Width="100" ItemStringFormat="随机个数{0}" ItemsSource="{x:Static local:RGCommon.RandomNum}">
-                    </ComboBox>
-                    <Button Content="随机主题字母" x:Name="btnSubjectRandom" Click="btnSubjectRandom_Click" />
-                </StackPanel>
-                <TextBox Text="{Binding Subject,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Top"/>
-                <TextBlock FontSize="20" Foreground="Green" DockPanel.Dock="Top" Text="填写正文内容"/>
-                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-                    <ComboBox SelectedValue="{Binding BodyCount}" ItemStringFormat="随机个数{0}" Width="100" ItemsSource="{x:Static local:RGCommon.RandomNum}"/>
-                    <Button Content="随机正文字母" x:Name="btnBodyRandom" Click="btnBodyRandom_Click"/>
-                </StackPanel>
-                <TextBox AcceptsReturn="True" Text="{Binding Body,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Top" ScrollViewer.VerticalScrollBarVisibility="Visible" TextWrapping="Wrap"/>
-            </DockPanel>
-        </TabItem>
-    </TabControl>
+                    </TextBlock>
+                    <ProgressBar Height="10" Value="{Binding Process}" x:Name="pb" DockPanel.Dock="Top" Minimum="0" Maximum="100"/>
+                    <TextBlock FontSize="20" Foreground="Green" DockPanel.Dock="Top" Text="填写主题"/>
+                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
+                        <ComboBox SelectedValue="{Binding SubjectCount}" Width="100" ItemStringFormat="随机个数{0}" ItemsSource="{x:Static local:RGCommon.RandomNum}">
+                        </ComboBox>
+                        <CheckBox IsChecked="{Binding SetSubjectRandom,Mode=TwoWay}" Content="添加随机主题字母"/>
+                        <CheckBox IsChecked="{Binding SetSubjectTime,Mode=TwoWay}" Content="添加日期时间"/>
+                    </StackPanel>
+                    <TextBox Text="{Binding Subject,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Top"/>
+                    <TextBlock FontSize="20" Foreground="Green" DockPanel.Dock="Top" Text="填写正文内容"/>
+                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                        <ComboBox SelectedValue="{Binding BodyCount}" ItemStringFormat="随机个数{0}" Width="100" ItemsSource="{x:Static local:RGCommon.RandomNum}"/>
+                        <CheckBox IsChecked="{Binding SetBodyRandom,Mode=TwoWay}" Content="添加随机主题字母"/>
+                        <CheckBox IsChecked="{Binding SetBodyTime,Mode=TwoWay}" Content="添加日期时间"/>
+                        <CheckBox Content="添加一言" IsChecked="{Binding SetBodyYan,Mode=TwoWay}"/>
+                    </StackPanel>
+                    <TextBox AcceptsReturn="True" Text="{Binding Body,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Top" ScrollViewer.VerticalScrollBarVisibility="Visible" TextWrapping="Wrap"/>
+                </DockPanel>
+            </TabItem>
+        </TabControl>
+    </Grid>
 </Window>

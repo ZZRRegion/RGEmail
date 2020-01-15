@@ -112,6 +112,40 @@ namespace RGMail
                     Password = sendMail.Password,
                     Priority = System.Net.Mail.MailPriority.Normal,
                 };
+                if (this.ViewModel.SetSubjectTime)
+                {
+                    mailModel.Subject += DateTime.Now;
+                }
+                if (this.ViewModel.SetBodyTime)
+                {
+                    mailModel.Body += DateTime.Now;
+                }
+                if (this.ViewModel.SetSubjectRandom)
+                {
+                    int subjectCount = this.ViewModel.SubjectCount;
+                    if (subjectCount <= 0)
+                        subjectCount = 1;
+                    mailModel.Subject = RandomUtil.GenerateRandomLetter(subjectCount) + mailModel.Subject;
+                }
+                if (this.ViewModel.SetBodyRandom)
+                {
+                    int bodyCount = this.ViewModel.BodyCount;
+                    if (bodyCount <= 0)
+                        bodyCount = 1;
+                    mailModel.Body = RandomUtil.GenerateRandomLetter(bodyCount) + mailModel.Body;
+                }
+                if (this.ViewModel.SetBodyYan)
+                {
+                    try
+                    {
+                        string yan = await NetUtil.GetYan();
+                        mailModel.Body += yan;
+                    }
+                    catch(Exception ex)
+                    {
+                        this.ViewModel.RunEmail = ex.Message;
+                    }
+                }
                 await MailUtil.SendMailUse(mailModel);
                 await Task.Delay(1000 * this.ViewModel.SendInterval);
             }
@@ -124,9 +158,17 @@ namespace RGMail
             this.ViewModel.Save();
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            
+            try
+            {
+                string url = await NetUtil.GetImageURL();
+                this.img.Source = new BitmapImage(new Uri(url));
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
         private async void btnImportSend_Click(object sender, RoutedEventArgs e)
@@ -149,26 +191,6 @@ namespace RGMail
                 await FileUtil.ReadSendEmailLines(fileName, this.ViewModel.Send, this.CancellationTokenSourceImportSend.Token);
                 this.isCancelSend = false;
             }
-        }
-
-        private void btnSubjectRandom_Click(object sender, RoutedEventArgs e)
-        {
-            int count = this.ViewModel.SubjectCount;
-            if(count <= 0)
-            {
-                count = 1;
-            }
-            this.ViewModel.Subject = RandomUtil.GenerateRandomLetter(count) + this.ViewModel.Subject;
-        }
-
-        private void btnBodyRandom_Click(object sender, RoutedEventArgs e)
-        {
-            int count = this.ViewModel.BodyCount;
-            if (count <= 0)
-            {
-                count = 1;
-            }
-            this.ViewModel.Body = RandomUtil.GenerateRandomLetter(count) + this.ViewModel.Body;
         }
     }
 }

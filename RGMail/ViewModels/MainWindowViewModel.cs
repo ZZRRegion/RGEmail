@@ -134,6 +134,18 @@ namespace RGMail.ViewModels
             }
             return new MainWindowViewModel();
         }
+        private bool setSubjectTime;
+        public bool SetSubjectTime
+        {
+            get => this.setSubjectTime;
+            set => this.SetProperty(ref this.setSubjectTime, value);
+        }
+        private bool setSubjectRandom;
+        public bool SetSubjectRandom
+        {
+            get => this.setSubjectRandom;
+            set => this.SetProperty(ref this.setSubjectRandom, value);
+        }
         private int subjectCount = 1;
         /// <summary>
         /// 主题前面随机字母数量
@@ -142,6 +154,18 @@ namespace RGMail.ViewModels
         {
             get => this.subjectCount;
             set => this.SetProperty(ref this.subjectCount, value);
+        }
+        private bool setBodyTime;
+        public bool SetBodyTime
+        {
+            get => this.setBodyTime;
+            set => this.SetProperty(ref this.setBodyTime, value);
+        }
+        private bool setBodyRandom;
+        public bool SetBodyRandom
+        {
+            get => this.setBodyRandom;
+            set => this.SetProperty(ref this.setBodyRandom, value);
         }
         private int bodyCount = 2;
         /// <summary>
@@ -213,6 +237,15 @@ namespace RGMail.ViewModels
         {
             get => this.sendInterval;
             set => this.SetProperty(ref this.sendInterval, value);
+        }
+        private bool setBodyYan;
+        /// <summary>
+        /// 添加每日一言
+        /// </summary>
+        public bool SetBodyYan
+        {
+            get => this.setBodyYan;
+            set => this.SetProperty(ref this.setBodyYan, value);
         }
     }
 }

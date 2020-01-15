@@ -11,7 +11,7 @@ namespace RGMail
     /// </summary>
     public static class RGCommon
     {
-        public static string DispalyTitle => "邮件群发[V0.1.5,2020-1-14 22:30:00]";
+        public static string DispalyTitle => "邮件群发[V0.1.6,2020-1-15 22:00:00]";
         public static MainWindow Main { get; set; }
         public static void MsgInfo(string info)
         {
