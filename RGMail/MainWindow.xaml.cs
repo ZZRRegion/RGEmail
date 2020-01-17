@@ -76,13 +76,10 @@ namespace RGMail
             int indexSEmail = 0;//当前使用发件人邮箱的下标
             int indexSend = 0;//当前发送的第几条
             int allCount = this.ViewModel.To.Count;//总共条数
-            Model.SendMail[] sendLst = new Model.SendMail[this.ViewModel.Send.Count];
-            this.ViewModel.Send.CopyTo(sendLst, 0);
-            string[] reciveLst = new string[this.ViewModel.To.Count];
-            this.ViewModel.To.CopyTo(reciveLst, 0);
+            Model.SendMail[] sendLst = this.ViewModel.Send.ToArray();
+            string[] reciveLst = this.ViewModel.To.ToArray();
             foreach(string item in reciveLst)
             {
-                
                 if (this.isCancelSend)
                 {
                     this.ViewModel.RunEmail = "正在导入收件/发件人邮箱，已停止发送！";
@@ -95,13 +92,20 @@ namespace RGMail
                     await Task.Delay(100);
                     goto pause;
                 }
+                string displayName = this.ViewModel.Name;//发件人姓名
+                if (indexSend % 5 == 0)
+                {
+                    string code = RandomUtil.GenerateRandomLetter(5);
+                    displayName += code;
+                }
                 indexSend++;
                 this.ViewModel.Process = (indexSend * 100.0 / allCount);
                 System.Windows.Forms.Application.DoEvents();
                 if (indexSEmail >= sendLst.Length)
                     indexSEmail = 0;
                 Model.SendMail sendMail = sendLst[indexSEmail++];
-                this.ViewModel.RunEmail = $"正在使用{sendMail.Address}发送到:{item}";
+                
+                this.ViewModel.RunEmail = $"正在使用发件人名称:{displayName}，发件人邮箱:{sendMail.Address}发送到:{item}";
                 Model.MailModel mailModel = new Model.MailModel()
                 {
                     To = new List<string>() { item },
@@ -109,7 +113,7 @@ namespace RGMail
                     Body = this.ViewModel.Body,
                     SMTPHost = this.ViewModel.SMTPHost,
                     MailAddress = sendMail.Address,
-                    Name = this.ViewModel.Name,
+                    Name = displayName,
                     Password = sendMail.Password,
                     Priority = System.Net.Mail.MailPriority.Normal,
                 };
@@ -163,8 +167,6 @@ namespace RGMail
         {
             try
             {
-                string url = await NetUtil.GetImageURL();
-                this.img.Source = new BitmapImage(new Uri(url));
                 await Task.Run(async() => {
                     while (true)
                     {

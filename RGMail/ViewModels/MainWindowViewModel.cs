@@ -124,6 +124,11 @@ namespace RGMail.ViewModels
             {
                 return "收件人列表不能为空,请添加！";
             }
+            if (string.IsNullOrWhiteSpace(this.Name))
+            {
+                return "发件人名称不能为空，请修改！";
+            }
+
             return null;
         }
         public static MainWindowViewModel ReadConfig()
@@ -255,10 +260,22 @@ namespace RGMail.ViewModels
             set => this.SetProperty(ref this.refreshFuLi, value);
         }
         private string fuLiImg = "https://api.ooopn.com/image/beauty/api.php";
+        /// <summary>
+        /// 福利图
+        /// </summary>
         public string FuLiImg
         {
             get => this.fuLiImg;
             set => this.SetProperty(ref this.fuLiImg, value);
+        }
+        private string backImg = "https://api.ooopn.com/image/beauty/api.php?" + DateTime.Now.Ticks;
+        /// <summary>
+        /// 背景图
+        /// </summary>
+        public string BackImg
+        {
+            get => this.backImg;
+            set => this.SetProperty(ref this.backImg, value);
         }
     }
 }

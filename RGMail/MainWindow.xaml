@@ -81,17 +81,21 @@
                                     <mater:PackIcon Kind="Send" />
                                 </mater:Chip.Icon>
                             </mater:Chip>
-                            <StackPanel>
-                                <TextBlock Text="发送间隔时间:秒"/>
-                                <TextBox InputMethod.IsInputMethodEnabled="False" Width="80" HorizontalAlignment="Left" Text="{Binding SendInterval}" />
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Foreground="Red" Width="110" Text="发件人名称:"/>
+                                <TextBox Text="{Binding Path=Name,Mode=TwoWay}" Width="200"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Width="110" Text="发送间隔时间(秒):"/>
+                                <TextBox InputMethod.IsInputMethodEnabled="False" Width="200" HorizontalAlignment="Left" Text="{Binding SendInterval}" />
                             </StackPanel>
                             <CheckBox IsChecked="{Binding IsPause,Mode=TwoWay}" Content="暂停发送"/>
-                            <TextBlock DockPanel.Dock="Top" Foreground="Red">
+                            <TextBlock MaxWidth="300" HorizontalAlignment="Left"  TextWrapping="Wrap" Foreground="Blue">
                                 <Run Text="发送状态："/>
                                 <Run Text="{Binding RunEmail}"/>
                             </TextBlock>
                         </StackPanel>
-                        <Image Grid.Column="1" Width="500" Stretch="Fill" Height="210" Source="https://api.ooopn.com/ipst/api.php" HorizontalAlignment="Right"/>
+                        <Image Grid.Column="1" Width="400" Stretch="Fill" Height="210" Source="https://api.ooopn.com/ipst/api.php" HorizontalAlignment="Right"/>
                     </Grid>
                     
                     <TextBlock Foreground="Blue" DockPanel.Dock="Top">
@@ -126,6 +130,6 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <Image Visibility="{Binding ElementName=tab,Path=SelectedItem.Tag,Converter={StaticResource n2v}}" IsHitTestVisible="False" Opacity="0.15" Stretch="Fill" x:Name="img"/>
+        <Image Source="{Binding BackImg}" Visibility="{Binding ElementName=tab,Path=SelectedItem.Tag,Converter={StaticResource n2v}}" IsHitTestVisible="False" Opacity="0.15" Stretch="Fill" x:Name="img"/>
     </Grid>
 </Window>
