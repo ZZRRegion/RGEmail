@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using System.Threading;
+using RGMail.Model;
+using RGMail.Utils;
 
 namespace RGMail
 {
@@ -25,7 +27,7 @@ namespace RGMail
         /// <param name="fileName"></param>
         /// <param name="dst"></param>
         /// <returns></returns>
-        public static async Task ReadEmailLines(string fileName, IList<string> dst, CancellationToken cancellationToken)
+        public static async Task ReadEmailLines(string fileName, IList<QQModel> dst, CancellationToken cancellationToken)
         {
             if (!File.Exists(fileName))
             {
@@ -43,9 +45,24 @@ namespace RGMail
                 string msg = string.Empty;
                 if (reg.IsMatch(line))
                 {
-                    if (!dst.Contains(line))
+                    if(dst.FirstOrDefault(item => item.QQ == line) == null)
                     {
-                        dst.Add(line);
+                        QQModel model = new QQModel()
+                        {
+                            QQ = line,
+                        };
+                        if (line.EndsWith("@qq.com"))
+                        {
+                            try
+                            {
+                                string qq = line.Replace("@qq.com", "");
+                                QQModel tempModel = await NetUtil.GetQQImage(qq);
+                                model.Name = tempModel.Name;
+                                model.ImgUrl = tempModel.ImgUrl;
+                            }
+                            finally { }
+                        }
+                        dst.Add(model);
                         msg = $"成功导入条数：{count++}";
                     }
                 }

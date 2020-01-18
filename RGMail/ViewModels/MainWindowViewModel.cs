@@ -29,11 +29,11 @@ namespace RGMail.ViewModels
         /// <summary>
         /// 收件人邮箱
         /// </summary>
-        private ObservableCollection<string> to = new ObservableCollection<string>();
-        public ObservableCollection<string> To
+        private ObservableCollection<QQModel> tos = new ObservableCollection<QQModel>();
+        public ObservableCollection<QQModel> Tos
         {
-            get => this.to;
-            set => this.SetProperty(ref this.to, value);
+            get => this.tos;
+            set => this.SetProperty(ref this.tos, value);
         }
         private string smtpHost = "smtp.jngjz.xyz";
         /// <summary>
@@ -103,7 +103,7 @@ namespace RGMail.ViewModels
             {
                 return "发件人不能为空！";
             }
-            if(this.to.Count == 0)
+            if(this.Tos.Count == 0)
             {
                 return "收件人不能为空！";
             }
@@ -120,7 +120,7 @@ namespace RGMail.ViewModels
             {
                 return "正文内容不能为空！";
             }
-            if (this.To.Count == 0)
+            if (this.Tos.Count == 0)
             {
                 return "收件人列表不能为空,请添加！";
             }
@@ -259,6 +259,24 @@ namespace RGMail.ViewModels
             get => this.refreshFuLi;
             set => this.SetProperty(ref this.refreshFuLi, value);
         }
+        private string sceneryImg = "https://api.ooopn.com/image/infinity/api.php"; 
+        /// <summary>
+        /// 美景美图
+        /// </summary>
+        public string SceneryImg
+        {
+            get => this.sceneryImg;
+            set => this.SetProperty(ref this.sceneryImg, value);
+        }
+        private string sogouImg = "https://api.ooopn.com/image/sogou/api.php";
+        /// <summary>
+        /// 搜狗美图
+        /// </summary>
+        public string SogouImg
+        {
+            get => this.sogouImg;
+            set => this.SetProperty(ref this.sogouImg, value);
+        }
         private string fuLiImg = "https://api.ooopn.com/image/beauty/api.php";
         /// <summary>
         /// 福利图
@@ -276,6 +294,30 @@ namespace RGMail.ViewModels
         {
             get => this.backImg;
             set => this.SetProperty(ref this.backImg, value);
+        }
+        private List<string> historyDays = new List<string>();
+        /// <summary>
+        /// 历史上的今天
+        /// </summary>
+        public List<string> HistoryDays
+        {
+            get => this.historyDays;
+            set => this.SetProperty(ref this.historyDays, value);
+        }
+        private int tabIndex = 0;
+        public int TabIndex
+        {
+            get => this.tabIndex;
+            set => this.SetProperty(ref this.tabIndex, value);
+        }
+        private bool addQQName;
+        /// <summary>
+        /// 添加QQ名称
+        /// </summary>
+        public bool AddQQName
+        {
+            get => this.addQQName;
+            set => this.SetProperty(ref this.addQQName, value);
         }
     }
 }

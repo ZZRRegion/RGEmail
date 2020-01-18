@@ -16,7 +16,7 @@
         Title="{Binding Source={x:Static local:RGCommon.DispalyTitle}}"
         Height="650" Width="1000">
     <Grid>
-        <TabControl x:Name="tab" Background="White" TabStripPlacement="Top">
+        <TabControl SelectedIndex="{Binding TabIndex,Mode=TwoWay}" x:Name="tab" Background="White" TabStripPlacement="Top">
             <TabItem Header="1、发件人配置">
                 <GroupBox Header="发件人配置">
                     <DockPanel>
@@ -60,8 +60,21 @@
                         <GroupBox x:Name="gbox" DockPanel.Dock="Top" Header="收件人列表">
                             <DockPanel>
                                 <TextBlock DockPanel.Dock="Top" Foreground="Blue" Text="{Binding Path=To,Converter={StaticResource ccc},StringFormat=收件人数量：{0}}"/>
-                                <ListBox x:Name="lst" ItemsSource="{Binding To}">
-                                </ListBox>
+                                <ListView ItemsSource="{Binding Tos}">
+                                    <ListView.View>
+                                        <GridView>
+                                            <GridViewColumn Header="头像">
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <Image Source="{Binding ImgUrl}"/>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+                                            <GridViewColumn Header="名称" Width="200" DisplayMemberBinding="{Binding Name}"/>
+                                            <GridViewColumn Header="邮箱" DisplayMemberBinding="{Binding QQ}"/>
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
                             </DockPanel>
                         </GroupBox>
                     </DockPanel>
@@ -97,7 +110,7 @@
                         </StackPanel>
                         <Image Grid.Column="1" Width="400" Stretch="Fill" Height="210" Source="https://api.ooopn.com/ipst/api.php" HorizontalAlignment="Right"/>
                     </Grid>
-                    
+
                     <TextBlock Foreground="Blue" DockPanel.Dock="Top">
                     <Run Text="当前进度："/>
                     <Run Text="{Binding Process,StringFormat={}{0:F2}%}"/>
@@ -117,17 +130,22 @@
                         <CheckBox IsChecked="{Binding SetBodyRandom,Mode=TwoWay}" Content="添加随机主题字母"/>
                         <CheckBox IsChecked="{Binding SetBodyTime,Mode=TwoWay}" Content="添加日期时间"/>
                         <CheckBox Content="添加一言" IsChecked="{Binding SetBodyYan,Mode=TwoWay}"/>
+                        <CheckBox Content="添加打招呼" IsChecked="{Binding AddQQName,Mode=TwoWay}"/>
                     </StackPanel>
                     <TextBox AcceptsReturn="True" Text="{Binding Body,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Top" ScrollViewer.VerticalScrollBarVisibility="Visible" TextWrapping="Wrap"/>
                 </DockPanel>
             </TabItem>
-            <TabItem Opacity="1" Header="福利图" Tag="1">
+            <TabItem Header="福利图" Tag="1">
                 <Grid>
                     <Image x:Name="imgFuLi" Source="{Binding FuLiImg}"/>
                     <StackPanel VerticalAlignment="Top" Orientation="Horizontal">
                         <CheckBox IsChecked="{Binding RefreshFuLi,Mode=TwoWay}" Content="自动刷新(10s)"/>
                     </StackPanel>
                 </Grid>
+            </TabItem>
+            <TabItem Header="历史上的今天" Tag="1">
+                <ListBox ItemsSource="{Binding HistoryDays}">
+                </ListBox>
             </TabItem>
         </TabControl>
         <Image Source="{Binding BackImg}" Visibility="{Binding ElementName=tab,Path=SelectedItem.Tag,Converter={StaticResource n2v}}" IsHitTestVisible="False" Opacity="0.15" Stretch="Fill" x:Name="img"/>

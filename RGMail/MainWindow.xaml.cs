@@ -16,6 +16,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using RGMail.Utils;
 using System.IO;
+using RGMail.Model;
 
 namespace RGMail
 {
@@ -58,8 +59,8 @@ namespace RGMail
                 }
                 this.CancellationTokenSourceImportRecive = new CancellationTokenSource();
                 string fileName = ofd.FileName;
-                this.ViewModel.To.Clear();
-                await FileUtil.ReadEmailLines(fileName, this.ViewModel.To, this.CancellationTokenSourceImportRecive.Token);
+                this.ViewModel.Tos.Clear();
+                await FileUtil.ReadEmailLines(fileName, this.ViewModel.Tos, this.CancellationTokenSourceImportRecive.Token);
                 this.isCancelSend = false;
             }
         }
@@ -75,10 +76,10 @@ namespace RGMail
             this.ViewModel.IsPause = false;
             int indexSEmail = 0;//当前使用发件人邮箱的下标
             int indexSend = 0;//当前发送的第几条
-            int allCount = this.ViewModel.To.Count;//总共条数
+            int allCount = this.ViewModel.Tos.Count;//总共条数
             Model.SendMail[] sendLst = this.ViewModel.Send.ToArray();
-            string[] reciveLst = this.ViewModel.To.ToArray();
-            foreach(string item in reciveLst)
+            QQModel[] reciveLst = this.ViewModel.Tos.ToArray();
+            foreach(QQModel item in reciveLst)
             {
                 if (this.isCancelSend)
                 {
@@ -108,7 +109,7 @@ namespace RGMail
                 this.ViewModel.RunEmail = $"正在使用发件人名称:{displayName}，发件人邮箱:{sendMail.Address}发送到:{item}";
                 Model.MailModel mailModel = new Model.MailModel()
                 {
-                    To = new List<string>() { item },
+                    To = new List<string>() { item.QQ },
                     Subject = this.ViewModel.Subject,
                     Body = this.ViewModel.Body,
                     SMTPHost = this.ViewModel.SMTPHost,
@@ -151,6 +152,10 @@ namespace RGMail
                         this.ViewModel.RunEmail = ex.Message;
                     }
                 }
+                if (this.ViewModel.AddQQName)
+                {
+                    mailModel.Body = $"您好：{item.Name}{Environment.NewLine}{mailModel.Body}";
+                }
                 await MailUtil.SendMailUse(mailModel);
                 await Task.Delay(1000 * this.ViewModel.SendInterval);
             }
@@ -167,13 +172,25 @@ namespace RGMail
         {
             try
             {
+                this.ViewModel.HistoryDays = await NetUtil.GetHistoryDay();
                 await Task.Run(async() => {
                     while (true)
                     {
                         if (this.ViewModel.RefreshFuLi)
                         {
                             string str = RandomUtil.GenerateRandomLetter(20);
-                            this.ViewModel.FuLiImg = $"https://api.ooopn.com/image/beauty/api.php?{str}";
+                            switch (this.ViewModel.TabIndex)
+                            {
+                                case 3:
+                                    this.ViewModel.FuLiImg = $"https://api.ooopn.com/image/beauty/api.php?{str}";
+                                    break;
+                                case 4:
+                                    this.ViewModel.SceneryImg = $"https://api.ooopn.com/image/infinity/api.php?{str}";
+                                    break;
+                                case 5:
+                                    this.ViewModel.SogouImg = $"https://api.ooopn.com/image/sogou/api.php?{str}";
+                                    break;
+                            }
                         }
                         await Task.Delay(10000);
                     }

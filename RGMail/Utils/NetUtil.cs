@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using RGMail.Model;
 
 namespace RGMail.Utils
 {
@@ -32,6 +33,27 @@ namespace RGMail.Utils
             string ipst = "https://api.ooopn.com/ipst/api.php";
             Stream stream = await httpClient.GetStreamAsync(ipst);
             return stream;
+        }
+        public static async Task<List<string>> GetHistoryDay()
+        {
+            string url = "https://api.ooopn.com/history/api.php";
+            string result = await httpClient.GetStringAsync(url);
+            JObject json = JObject.Parse(result);
+            JArray content = json.Value<JArray>("content");
+            List<string> lst = JsonConvert.DeserializeObject<List<string>>(content.ToString());
+            return lst;
+        }
+        /// <summary>
+        /// QQ名称和头像获取
+        /// </summary>
+        /// <param name="qq"></param>
+        /// <returns></returns>
+        public static async Task<QQModel> GetQQImage(string qq)
+        {
+            string url = $"https://api.ooopn.com/qqinfo/api.php?qq={qq}";
+            string result = await httpClient.GetStringAsync(url);
+            QQModel model = JsonConvert.DeserializeObject<QQModel>(result);
+            return model;
         }
     }
 }

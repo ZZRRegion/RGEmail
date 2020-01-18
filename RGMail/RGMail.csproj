@@ -72,6 +72,7 @@
     </ApplicationDefinition>
     <Compile Include="Converters\CollectionCountConverter.cs" />
     <Compile Include="Converters\Number2Visibility.cs" />
+    <Compile Include="Model\QQModel.cs" />
     <Compile Include="Model\SendMail.cs" />
     <Compile Include="Utils\FileUtil.cs" />
     <Compile Include="Utils\MailUtil.cs" />
