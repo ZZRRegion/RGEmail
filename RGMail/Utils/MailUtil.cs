@@ -32,7 +32,7 @@ namespace RGMail
                 }
                 else
                 {
-                    RGCommon.Main.ViewModel.RunEmail = "发送成功！";
+                    //RGCommon.Main.ViewModel.RunEmail = "发送成功！";
                 }
             };
             client.Credentials = new System.Net.NetworkCredential(mail.MailAddress, mail.Password);

@@ -17,6 +17,7 @@ using System.Threading;
 using RGMail.Utils;
 using System.IO;
 using RGMail.Model;
+using log4net;
 
 namespace RGMail
 {
@@ -25,6 +26,7 @@ namespace RGMail
     /// </summary>
     public partial class MainWindow : Window
     {
+        private ILog log = LogManager.GetLogger(nameof(MainWindow));
         public ViewModels.MainWindowViewModel ViewModel { get; set; }
         private CancellationTokenSource CancellationTokenSourceImportRecive;
         private CancellationTokenSource CancellationTokenSourceImportSend;
@@ -83,13 +85,13 @@ namespace RGMail
             {
                 if (this.isCancelSend)
                 {
-                    this.ViewModel.RunEmail = "正在导入收件/发件人邮箱，已停止发送！";
+                    this.ViewModel.RunEmail = "正在导入收件/发件人邮箱，已停止发送！" + Environment.NewLine + this.ViewModel.RunEmail;
                     break;
                 }
                 pause:
                 if (this.ViewModel.IsPause)
                 {
-                    this.ViewModel.RunEmail = "已暂停发送";
+                    this.ViewModel.RunEmail = "已暂停发送" + Environment.NewLine + this.ViewModel.RunEmail;
                     await Task.Delay(100);
                     goto pause;
                 }
@@ -105,8 +107,8 @@ namespace RGMail
                 if (indexSEmail >= sendLst.Length)
                     indexSEmail = 0;
                 Model.SendMail sendMail = sendLst[indexSEmail++];
-                
-                this.ViewModel.RunEmail = $"正在使用发件人名称:{displayName}，发件人邮箱:{sendMail.Address}发送到:{item}";
+
+                this.ViewModel.RunEmail = $"正在使用发件人名称:{displayName}，发件人邮箱:{sendMail.Address}发送到:{item.QQ}{Environment.NewLine}" + this.ViewModel.RunEmail;
                 Model.MailModel mailModel = new Model.MailModel()
                 {
                     To = new List<string>() { item.QQ },
@@ -149,7 +151,7 @@ namespace RGMail
                     }
                     catch(Exception ex)
                     {
-                        this.ViewModel.RunEmail = ex.Message;
+                        this.log.Error("", ex);
                     }
                 }
                 if (this.ViewModel.AddQQName)
@@ -160,16 +162,18 @@ namespace RGMail
                 await Task.Delay(1000 * this.ViewModel.SendInterval);
             }
             if(!this.isCancelSend)
-            RGCommon.MsgInfo("发送完成！");
+            RGCommon.MsgInfo($"发送完成！");
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            this.log.Info("应用关闭！");
             this.ViewModel.Save();
         }
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            this.log.Info("应用加载完成！");
             try
             {
                 this.ViewModel.HistoryDays = await NetUtil.GetHistoryDay();
@@ -198,7 +202,7 @@ namespace RGMail
             }
             catch(Exception ex)
             {
-                RGCommon.Log(ex.Message);
+                this.log.Error("", ex);
             }
         }
 

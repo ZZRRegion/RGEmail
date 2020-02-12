@@ -13,5 +13,15 @@ namespace RGMail
     /// </summary>
     public partial class App : Application
     {
+        public App()
+        {
+            this.InitLog();
+        }
+        private void InitLog()
+        {
+            string locationPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            string m_strPath = locationPath + "\\config\\log4net.config";
+            log4net.Config.XmlConfigurator.Configure(new System.IO.FileInfo(m_strPath));
+        }
     }
 }

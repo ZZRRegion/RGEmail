@@ -48,7 +48,7 @@ namespace RGMail.Utils
             }
             catch(Exception ex)
             {
-                RGCommon.Log(ex.Message);
+                RGCommon.Error(ex);
                 return null;
             }
         }
@@ -61,8 +61,16 @@ namespace RGMail.Utils
         {
             string url = $"https://api.ooopn.com/qqinfo/api.php?qq={qq}";
             string result = await httpClient.GetStringAsync(url);
-            QQModel model = JsonConvert.DeserializeObject<QQModel>(result);
-            return model;
+            try
+            {
+                QQModel model = JsonConvert.DeserializeObject<QQModel>(result);
+                return model;
+            }
+            catch(Exception ex)
+            {
+                RGCommon.Error(ex);
+                return null;
+            }
         }
     }
 }

@@ -11,10 +11,11 @@ namespace RGMail
     /// </summary>
     public static class RGCommon
     {
+        private static log4net.ILog log = log4net.LogManager.GetLogger(nameof(RGCommon));
         /// <summary>
         /// 版本日期显示，绑定显示
         /// </summary>
-        public static string DispalyTitle => "邮件群发[V0.1.9,2020-2-12 16:30:00]";
+        public static string DispalyTitle => "邮件群发[V0.1.10,2020-2-12 21:30:00]";
         public static MainWindow Main { get; set; }
         public static void MsgInfo(string info)
         {
@@ -31,9 +32,9 @@ namespace RGMail
         /// 控制台日志
         /// </summary>
         /// <param name="msg"></param>
-        public static void Log(string msg)
+        public static void Error(Exception ex)
         {
-            Console.WriteLine(msg);
+            log.Error("", ex);
         }
     }
 }
