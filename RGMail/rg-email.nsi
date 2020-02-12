@@ -2,7 +2,7 @@
 
 ; 安装程序初始定义常量
 !define PRODUCT_NAME "RG-Email"
-!define PRODUCT_VERSION "0.1.7"
+!define PRODUCT_VERSION "0.1.9"
 !define PRODUCT_PUBLISHER "stdio"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\RGMail.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"

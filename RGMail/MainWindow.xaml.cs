@@ -192,13 +192,13 @@ namespace RGMail
                                     break;
                             }
                         }
-                        await Task.Delay(10000);
+                        await Task.Delay(10000);//延时时间
                     }
                 });
             }
             catch(Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                RGCommon.Log(ex.Message);
             }
         }
 

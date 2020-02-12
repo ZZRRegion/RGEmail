@@ -36,12 +36,21 @@ namespace RGMail.Utils
         }
         public static async Task<List<string>> GetHistoryDay()
         {
-            string url = "https://api.ooopn.com/history/api.php";
+            string temp = RandomUtil.GenerateRandomLetter(10);
+            string url = $"https://api.ooopn.com/history/api.php?{temp}";
             string result = await httpClient.GetStringAsync(url);
-            JObject json = JObject.Parse(result);
-            JArray content = json.Value<JArray>("content");
-            List<string> lst = JsonConvert.DeserializeObject<List<string>>(content.ToString());
-            return lst;
+            try
+            {
+                JObject json = JObject.Parse(result);
+                JArray content = json.Value<JArray>("content");
+                List<string> lst = JsonConvert.DeserializeObject<List<string>>(content.ToString());
+                return lst;
+            }
+            catch(Exception ex)
+            {
+                RGCommon.Log(ex.Message);
+                return null;
+            }
         }
         /// <summary>
         /// QQ名称和头像获取
