@@ -2,7 +2,7 @@
 
 ; 安装程序初始定义常量
 !define PRODUCT_NAME "RG-Email"
-!define PRODUCT_VERSION "0.1.9"
+!define PRODUCT_VERSION "0.1.10"
 !define PRODUCT_PUBLISHER "stdio"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\RGMail.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
@@ -57,6 +57,10 @@ Section "MainSection" SEC01
   File "bin\Release\Newtonsoft.Json.dll"
   File "bin\Release\MaterialDesignThemes.Wpf.dll"
   File "bin\Release\MaterialDesignColors.dll"
+	File "bin\Release\log4net.dll"
+	SetOutPath "$INSTDIR\Config"
+	File "bin\Release\Config\log4net.config"
+	SetOutPath "$INSTDIR"
 SectionEnd
 
 Section -AdditionalIcons
@@ -84,7 +88,8 @@ Section Uninstall
   Delete "$INSTDIR\Newtonsoft.Json.dll"
   Delete "$INSTDIR\RGMail.exe"
   Delete "$INSTDIR\To.txt"
-
+  Delete "bin\Release\Config\log4net.config"
+	Delete "bin\Release\log4net.dll"
   Delete "$SMPROGRAMS\RG-Email\Uninstall.lnk"
   Delete "$DESKTOP\RG-Email.lnk"
   Delete "$SMPROGRAMS\RG-Email\RG-Email.lnk"
