@@ -17,6 +17,15 @@ namespace RGMail.ViewModels
 {
     public class MainWindowViewModel:ViewModelBase
     {
+        private TimeSpan useTime = TimeSpan.FromSeconds(1);
+        /// <summary>
+        /// 使用时长
+        /// </summary>
+        public TimeSpan UseTime
+        {
+            get => this.useTime;
+            set => this.SetProperty(ref this.useTime, value);
+        }
         private ObservableCollection<Model.SendMail> send = new ObservableCollection<SendMail>();
         /// <summary>
         /// 发件人邮箱
@@ -294,15 +303,6 @@ namespace RGMail.ViewModels
         {
             get => this.backImg;
             set => this.SetProperty(ref this.backImg, value);
-        }
-        private List<string> historyDays = new List<string>();
-        /// <summary>
-        /// 历史上的今天
-        /// </summary>
-        public List<string> HistoryDays
-        {
-            get => this.historyDays;
-            set => this.SetProperty(ref this.historyDays, value);
         }
         private int tabIndex = 0;
         public int TabIndex

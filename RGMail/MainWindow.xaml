@@ -144,9 +144,16 @@
                     </StackPanel>
                 </Grid>
             </TabItem>
-            <TabItem Header="历史上的今天" Tag="1">
-                <ListBox ItemsSource="{Binding HistoryDays}">
-                </ListBox>
+            <TabItem Header="关于">
+                <StackPanel Margin="0,100,0,0" HorizontalAlignment="Center">
+                    <StackPanel>
+                        <TextBlock Foreground="Blue" FontSize="40" Text="RG-Email @stdio"/>
+                        <TextBlock FontSize="20">
+                            <Run Text="软件已使用时长："/>
+                            <Run Text="{Binding UseTime}"/>
+                        </TextBlock>
+                    </StackPanel>
+                </StackPanel>
             </TabItem>
         </TabControl>
         <Image Source="{Binding BackImg}" Visibility="{Binding ElementName=tab,Path=SelectedItem.Tag,Converter={StaticResource n2v}}" IsHitTestVisible="False" Opacity="0.15" Stretch="Fill" x:Name="img"/>

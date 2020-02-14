@@ -173,10 +173,23 @@ namespace RGMail
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                ThreadPool.QueueUserWorkItem((asy) => {
+                    while (true)
+                    {
+                        this.ViewModel.UseTime += TimeSpan.FromSeconds(1);
+                        Thread.Sleep(1000);
+                    }
+                });
+            }
+            catch(Exception ex)
+            {
+                this.log.Error("", ex);
+            }
             this.log.Info("应用加载完成！");
             try
             {
-                this.ViewModel.HistoryDays = await NetUtil.GetHistoryDay();
                 await Task.Run(async() => {
                     while (true)
                     {
