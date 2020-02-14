@@ -12,11 +12,22 @@ using System.Xml.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows.Media;
+using Newtonsoft.Json;
 
 namespace RGMail.ViewModels
 {
     public class MainWindowViewModel:ViewModelBase
     {
+        private string message;
+        /// <summary>
+        /// 用户留言
+        /// </summary>
+        [JsonIgnore]
+        public string Message
+        {
+            get => this.message;
+            set => this.SetProperty(ref this.message, value);
+        }
         private TimeSpan useTime = TimeSpan.FromSeconds(1);
         /// <summary>
         /// 使用时长

@@ -15,7 +15,7 @@ namespace RGMail
         /// <summary>
         /// 版本日期显示，绑定显示
         /// </summary>
-        public static string DispalyTitle => "邮件群发[V0.1.11,2020-2-14 15:30:00]";
+        public static string DispalyTitle => "邮件群发[V0.1.12,2020-2-14 18:00:00]";
         public static MainWindow Main { get; set; }
         public static void MsgInfo(string info)
         {

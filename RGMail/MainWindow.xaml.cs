@@ -18,6 +18,7 @@ using RGMail.Utils;
 using System.IO;
 using RGMail.Model;
 using log4net;
+using System.Net.Http;
 
 namespace RGMail
 {
@@ -238,6 +239,22 @@ namespace RGMail
                 this.ViewModel.Send.Clear();
                 await FileUtil.ReadSendEmailLines(fileName, this.ViewModel.Send, this.CancellationTokenSourceImportSend.Token);
                 this.isCancelSend = false;
+            }
+        }
+
+        private async void btnPost_Click(object sender, RoutedEventArgs e)
+        {
+            HttpClient httpClient = new HttpClient();
+            StringContent stringContent = new StringContent(this.ViewModel.Message);
+            HttpResponseMessage httpResponseMessage = await httpClient.PostAsync("http://zzrstdio.utools.club/Email/Message", stringContent);
+            if (httpResponseMessage.IsSuccessStatusCode)
+            {
+                string result = await httpResponseMessage.Content.ReadAsStringAsync();
+                MessageBox.Show(result);
+            }
+            else
+            {
+                MessageBox.Show("留言失败!");
             }
         }
     }
