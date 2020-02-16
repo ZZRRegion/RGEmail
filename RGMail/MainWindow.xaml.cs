@@ -96,12 +96,7 @@ namespace RGMail
                     await Task.Delay(100);
                     goto pause;
                 }
-                string displayName = this.ViewModel.Name;//发件人姓名
-                if (indexSend % 5 == 0)
-                {
-                    string code = RandomUtil.GenerateRandomLetter(5);
-                    displayName += code;
-                }
+                this.ViewModel.Name = RandomUtil.GenerateCheckCodeNum(5);
                 indexSend++;
                 this.ViewModel.Process = (indexSend * 100.0 / allCount);
                 System.Windows.Forms.Application.DoEvents();
@@ -109,7 +104,7 @@ namespace RGMail
                     indexSEmail = 0;
                 Model.SendMail sendMail = sendLst[indexSEmail++];
 
-                this.ViewModel.RunEmail = $"正在使用发件人名称:{displayName}，发件人邮箱:{sendMail.Address}发送到:{item.QQ}{Environment.NewLine}" + this.ViewModel.RunEmail;
+                this.ViewModel.RunEmail = $"正在使用发件人名称:{this.ViewModel.Name}，发件人邮箱:{sendMail.Address}发送到:{item.QQ}{Environment.NewLine}" + this.ViewModel.RunEmail;
                 Model.MailModel mailModel = new Model.MailModel()
                 {
                     To = new List<string>() { item.QQ },
@@ -117,7 +112,7 @@ namespace RGMail
                     Body = this.ViewModel.Body,
                     SMTPHost = this.ViewModel.SMTPHost,
                     MailAddress = sendMail.Address,
-                    Name = displayName,
+                    Name = this.ViewModel.Name,
                     Password = sendMail.Password,
                     Priority = System.Net.Mail.MailPriority.Normal,
                 };
@@ -245,8 +240,13 @@ namespace RGMail
         private async void btnPost_Click(object sender, RoutedEventArgs e)
         {
             HttpClient httpClient = new HttpClient();
-            StringContent stringContent = new StringContent(this.ViewModel.Message);
-            HttpResponseMessage httpResponseMessage = await httpClient.PostAsync("http://zzrstdio.utools.club/Email/Message", stringContent);
+            Dictionary<string, string> keyValues = new Dictionary<string, string>()
+            {
+                {"msg", this.ViewModel.Message },
+                {"name", Environment.MachineName },
+            };
+            FormUrlEncodedContent formUrlEncodedContent = new FormUrlEncodedContent(keyValues);
+            HttpResponseMessage httpResponseMessage = await httpClient.PostAsync("http://zzrstdio.utools.club/Email/Message", formUrlEncodedContent);
             if (httpResponseMessage.IsSuccessStatusCode)
             {
                 string result = await httpResponseMessage.Content.ReadAsStringAsync();

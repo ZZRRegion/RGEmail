@@ -79,7 +79,6 @@
                         </GroupBox>
                     </DockPanel>
                 </GroupBox>
-
             </TabItem>
             <TabItem Header="3、发送配置">
                 <DockPanel>
@@ -147,12 +146,11 @@
             <TabItem Header="关于">
                 <StackPanel Margin="0,100,0,0" HorizontalAlignment="Center">
                     <StackPanel>
-                        <TextBlock Foreground="Blue" FontSize="40" Text="RG-Email @stdio"/>
-                        <TextBlock FontSize="20">
+                        <TextBlock Foreground="BlueViolet" FontSize="20">
                             <Run Text="软件已使用时长："/>
                             <Run Text="{Binding UseTime}"/>
                         </TextBlock>
-                        <GroupBox Header="使用建议留言">
+                        <GroupBox Visibility="Collapsed" Header="使用建议留言">
                             <StackPanel>
                                 <TextBox Text="{Binding Message,UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" Width="600" TextWrapping="Wrap" mater:TextFieldAssist.SuffixText="请输入留言内容" Height="100"></TextBox>
                                 <Button x:Name="btnPost" Click="btnPost_Click" Margin="0,5,0,0" Width="200" HorizontalAlignment="Right" Content="提交"/>

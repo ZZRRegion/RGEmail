@@ -15,6 +15,10 @@ namespace RGMail.Utils
     {
         private static string ImageURLJson => "https://api.ooopn.com/image/lofter/api.php?type=json";
         private static string YanURL => "https://v1.hitokoto.cn/?encode=text";
+        /// <summary>
+        /// 随机名称
+        /// </summary>
+        private static string RandomNameURL => "https://api.ooopn.com/yan/api.php?type=text";
         private static HttpClient httpClient = new HttpClient();
         public static async Task<string> GetImageURL()
         {
@@ -33,6 +37,23 @@ namespace RGMail.Utils
             string ipst = "https://api.ooopn.com/ipst/api.php";
             Stream stream = await httpClient.GetStreamAsync(ipst);
             return stream;
+        }
+        /// <summary>
+        /// 随机名称
+        /// </summary>
+        /// <returns></returns>
+        public static async Task<string> GetRandomName()
+        {
+            try
+            {
+                string result = await httpClient.GetStringAsync(RandomNameURL);
+                return result;
+            }
+            catch(Exception ex)
+            {
+                RGCommon.Error(ex);
+            }
+            return Environment.UserName;
         }
         public static async Task<List<string>> GetHistoryDay()
         {
