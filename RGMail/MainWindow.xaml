@@ -19,30 +19,49 @@
         <TabControl SelectedIndex="{Binding TabIndex,Mode=TwoWay}" x:Name="tab" Background="White" TabStripPlacement="Top">
             <TabItem Header="1、发件人配置">
                 <GroupBox Header="发件人配置">
-                    <DockPanel>
-                        <mater:Chip x:Name="btnImportSend" Click="btnImportSend_Click" ToolTip="txt文件，邮箱号与密码使用空格隔开" Foreground="White" Background="{StaticResource PrimaryHueDarkBrush}" DockPanel.Dock="Top" Content="导入发件人邮箱">
-                            <mater:Chip.Icon>
-                                <mater:PackIcon Kind="AccountCardDetails" />
-                            </mater:Chip.Icon>
-                        </mater:Chip>
-                        <TextBlock DockPanel.Dock="Top" Foreground="Red">
-                        <Run Text="导入状态："/>
-                        <Run Text="{Binding SendEmail}"/>
-                        </TextBlock>
-                        <GroupBox Header="发件人列表">
-                            <DockPanel>
-                                <TextBlock DockPanel.Dock="Top" Text="{Binding Path=Send,Converter={StaticResource ccc},StringFormat=发件人数量：{0}}"/>
-                                <ListView ItemsSource="{Binding Send}">
-                                    <ListView.View>
-                                        <GridView>
-                                            <GridViewColumn Header="邮箱" DisplayMemberBinding="{Binding Address}"/>
-                                            <GridViewColumn Header="密码" DisplayMemberBinding="{Binding Password}"/>
-                                        </GridView>
-                                    </ListView.View>
-                                </ListView>
-                            </DockPanel>
-                        </GroupBox>
-                    </DockPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <DockPanel>
+                            <mater:Chip x:Name="btnImportSend" Click="btnImportSend_Click" ToolTip="txt文件，邮箱号与密码使用空格隔开" Foreground="White" Background="{StaticResource PrimaryHueDarkBrush}" DockPanel.Dock="Top" Content="导入发件人邮箱">
+                                <mater:Chip.Icon>
+                                    <mater:PackIcon Kind="AccountCardDetails" />
+                                </mater:Chip.Icon>
+                            </mater:Chip>
+                            <TextBlock DockPanel.Dock="Top">
+                                <Run Text="导入状态："/>
+                                <Run Text="{Binding SendEmail}"/>
+                            </TextBlock>
+                            <GroupBox MinWidth="200" Header="发件人列表">
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Path=Send,Converter={StaticResource ccc},StringFormat=发件人数量：{0}}"/>
+                                    <ListView ItemsSource="{Binding Send}">
+                                        <ListView.View>
+                                            <GridView>
+                                                <GridViewColumn Header="邮箱" DisplayMemberBinding="{Binding Address}"/>
+                                                <GridViewColumn Header="密码" DisplayMemberBinding="{Binding Password}"/>
+                                            </GridView>
+                                        </ListView.View>
+                                    </ListView>
+                                </StackPanel>
+                            </GroupBox>
+                        </DockPanel>
+                        <DockPanel Margin="10,0,0,0">
+                            <mater:Chip DockPanel.Dock="Top" ToolTip="一行一个名称" x:Name="btnImportNames" Click="btnImportNames_Click" Foreground="White" Background="{StaticResource PrimaryHueDarkBrush}" Content="导入发件人名称">
+                                <mater:Chip.Icon>
+                                    <mater:PackIcon Kind="RenameBox" />
+                                </mater:Chip.Icon>
+                            </mater:Chip>
+                            <TextBlock DockPanel.Dock="Top">
+                                <Run Text="导入状态："/>
+                                <Run Text="{Binding SendEmail}"/>
+                            </TextBlock>
+                            <GroupBox MinWidth="200" Header="发件人名称列表">
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Path=SendNames,Converter={StaticResource ccc},StringFormat=发件人名称数量：{0}}"/>
+                                    <ListBox ItemsSource="{Binding SendNames}"></ListBox>
+                                </StackPanel>
+                            </GroupBox>
+                        </DockPanel>
+                    </StackPanel>
                 </GroupBox>
             </TabItem>
             <TabItem Header="2、收件人配置">
@@ -54,12 +73,12 @@
                             </mater:Chip.Icon>
                         </mater:Chip>
                         <TextBlock DockPanel.Dock="Top" Foreground="Red">
-                        <Run Text="导入状态："/>
-                        <Run Text="{Binding ReciveEamil}"/>
+                            <Run Text="导入状态："/>
+                            <Run Text="{Binding ReciveEamil}"/>
                         </TextBlock>
                         <GroupBox x:Name="gbox" DockPanel.Dock="Top" Header="收件人列表">
                             <DockPanel>
-                                <TextBlock DockPanel.Dock="Top" Foreground="Blue" Text="{Binding Path=To,Converter={StaticResource ccc},StringFormat=收件人数量：{0}}"/>
+                                <TextBlock DockPanel.Dock="Top" Foreground="Blue" Text="{Binding Path=Tos,Converter={StaticResource ccc},StringFormat=收件人数量：{0}}"/>
                                 <ListView ItemsSource="{Binding Tos}">
                                     <ListView.View>
                                         <GridView>
@@ -96,6 +115,7 @@
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Foreground="Red" Width="110" Text="发件人名称:"/>
                                 <TextBox Text="{Binding Path=Name,Mode=TwoWay}" Width="200"/>
+                                <CheckBox IsChecked="{Binding UseSendNames,Mode=TwoWay}" Content="循环使用发件人名称列表"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Width="110" Text="发送间隔时间(秒):"/>

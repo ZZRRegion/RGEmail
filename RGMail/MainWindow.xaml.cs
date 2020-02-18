@@ -19,6 +19,7 @@ using System.IO;
 using RGMail.Model;
 using log4net;
 using System.Net.Http;
+using System.Collections.ObjectModel;
 
 namespace RGMail
 {
@@ -96,7 +97,15 @@ namespace RGMail
                     await Task.Delay(100);
                     goto pause;
                 }
-                this.ViewModel.Name = RandomUtil.GenerateCheckCodeNum(5);
+                if (this.ViewModel.UseSendNames)//使用循环名称列表
+                {
+                    if(this.ViewModel.SendNames.Count == 0)
+                    {
+                        RGCommon.MsgInfo("发件人名称列表为空，请在发件人配置中配置！", false);
+                        return;
+                    }
+                    this.ViewModel.Name = this.ViewModel.SendNames[indexSend % this.ViewModel.SendNames.Count];
+                }
                 indexSend++;
                 this.ViewModel.Process = (indexSend * 100.0 / allCount);
                 System.Windows.Forms.Application.DoEvents();
@@ -255,6 +264,24 @@ namespace RGMail
             else
             {
                 MessageBox.Show("留言失败!");
+            }
+        }
+
+        private void btnImportNames_Click(object sender, RoutedEventArgs e)
+        {
+            Microsoft.Win32.OpenFileDialog ofd = new Microsoft.Win32.OpenFileDialog();
+            ofd.Filter = "txt|*.txt";
+            bool? result = ofd.ShowDialog();
+            if (result.HasValue && result.Value)
+            {
+                string[] lines = File.ReadAllLines(ofd.FileName);
+                ObservableCollection<string> obs = new ObservableCollection<string>();
+                foreach(string line in lines)
+                {
+                    if(!string.IsNullOrWhiteSpace(line))
+                        obs.Add(line);
+                }
+                this.ViewModel.SendNames = obs;
             }
         }
     }

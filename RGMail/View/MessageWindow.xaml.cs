@@ -20,10 +20,11 @@ namespace RGMail.View
     public partial class MessageWindow : Window
     {
         public ViewModels.MessageWindowViewModel ViewModel { get; set; } = new ViewModels.MessageWindowViewModel();
-        public MessageWindow()
+        public MessageWindow(bool autoClose = true)
         {
             InitializeComponent();
             this.DataContext = this.ViewModel;
+            this.ViewModel.IsAutoClose = autoClose;
         }
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
         {

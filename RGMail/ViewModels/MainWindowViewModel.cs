@@ -106,7 +106,7 @@ namespace RGMail.ViewModels
         const string config = "config.json";
         public void Save()
         {
-            string result = Newtonsoft.Json.JsonConvert.SerializeObject(this);
+            string result = Newtonsoft.Json.JsonConvert.SerializeObject(this, Formatting.Indented);
             File.WriteAllText(config, result);
         }
         /// <summary>
@@ -329,6 +329,24 @@ namespace RGMail.ViewModels
         {
             get => this.addQQName;
             set => this.SetProperty(ref this.addQQName, value);
+        }
+        private ObservableCollection<string> sendNames = new ObservableCollection<string>();
+        /// <summary>
+        /// 发件人名称
+        /// </summary>
+        public ObservableCollection<string> SendNames
+        {
+            get => this.sendNames;
+            set => this.SetProperty(ref this.sendNames, value);
+        }
+        private bool useSendNames = true;
+        /// <summary>
+        /// 是否循环使用发件人名称列表
+        /// </summary>
+        public bool UseSendNames
+        {
+            get => this.useSendNames;
+            set => this.SetProperty(ref this.useSendNames, value);
         }
     }
 }
