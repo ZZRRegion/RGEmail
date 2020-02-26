@@ -284,5 +284,20 @@ namespace RGMail
                 this.ViewModel.SendNames = obs;
             }
         }
+
+        private void btnSaveQRImg_Click(object sender, RoutedEventArgs e)
+        {
+            if(this.ViewModel.QRImg != null)
+            {
+                Microsoft.Win32.SaveFileDialog sfd = new Microsoft.Win32.SaveFileDialog();
+                sfd.Filter = "图片|*.png";
+                sfd.AddExtension = true;
+                if(sfd.ShowDialog(this) is true)
+                {
+                    this.ViewModel.QRImg.SaveImageToFile(sfd.FileName);
+                    RGCommon.MsgInfo($"保存成功！{Environment.NewLine}{sfd.FileName}");
+                }
+            }
+        }
     }
 }

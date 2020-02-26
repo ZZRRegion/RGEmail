@@ -13,6 +13,8 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows.Media;
 using Newtonsoft.Json;
+using System.Windows.Media.Imaging;
+using RGMail.Utils;
 
 namespace RGMail.ViewModels
 {
@@ -348,5 +350,26 @@ namespace RGMail.ViewModels
             get => this.useSendNames;
             set => this.SetProperty(ref this.useSendNames, value);
         }
+        private string qrtext = "hello world";
+        public string QRtext
+        {
+            get => this.qrtext;
+            set
+            {
+                this.SetProperty(ref this.qrtext, value);
+                if (!string.IsNullOrWhiteSpace(this.qrtext))
+                {
+                    this.QRImg = QRCodeHelp.Create(this.qrtext).Bitmap2BitmapImage();
+                }
+            }
+        }
+        private BitmapSource qrimg;
+        [JsonIgnore]
+        public BitmapSource QRImg
+        {
+            get => this.qrimg;
+            set => this.SetProperty(ref this.qrimg, value);
+        }
+
     }
 }

@@ -2,7 +2,7 @@
 
 ; 安装程序初始定义常量
 !define PRODUCT_NAME "RG-Email"
-!define PRODUCT_VERSION "0.1.14"
+!define PRODUCT_VERSION "0.1.15"
 !define PRODUCT_PUBLISHER "stdio"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\RGMail.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
@@ -58,6 +58,8 @@ Section "MainSection" SEC01
   File "bin\Release\MaterialDesignThemes.Wpf.dll"
   File "bin\Release\MaterialDesignColors.dll"
 	File "bin\Release\log4net.dll"
+	File "bin\Release\QRCoder.dll"
+	File "bin\Release\System.Drawing.Common.dll"
 	SetOutPath "$INSTDIR\Config"
 	File "bin\Release\Config\log4net.config"
 	SetOutPath "$INSTDIR"

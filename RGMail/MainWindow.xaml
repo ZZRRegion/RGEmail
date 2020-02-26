@@ -163,6 +163,13 @@
                     </StackPanel>
                 </Grid>
             </TabItem>
+            <TabItem Header="二维码生成">
+                <StackPanel>
+                    <TextBox Text="{Binding QRtext,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" mater:TextFieldAssist.SuffixText="请输入内容" TextWrapping="Wrap" Width="435"/>
+                    <Image Width="435" Source="{Binding QRImg}" Stretch="Fill" Height="435" x:Name="imgQR"/>
+                    <Button x:Name="btnSaveQRImg" Click="btnSaveQRImg_Click" Content="保存二维码" Width="435"/>
+                </StackPanel>
+            </TabItem>
             <TabItem Header="关于">
                 <StackPanel Margin="0,100,0,0" HorizontalAlignment="Center">
                     <StackPanel>
